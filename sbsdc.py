@@ -99,7 +99,7 @@ while 1:
     module = message.split("+")[0]
     geo = get_location(message.split("+")[0])
     message = " ".join(message.split("+")[1:])
-    open("sbsdc.log", "w").write("%s: %s | %s\n" % (datetime.datetime.now(), sender, message))
+    open("../logs/sbsdc.log", "a").write("%s: %s | %s | %s\n" % (datetime.datetime.now(), sender, module, message))
     newpid = os.fork()
     if newpid == 0:
          run_module(module, geo , message)
