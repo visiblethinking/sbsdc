@@ -17,13 +17,15 @@ import sys
 import datetime
 import os
 sys.path.append("/var/www/smartbusstop.com/sbsdc")
-from modules import *
-from geocode import *
+
 
 # open port and recieve incomming connections   
 HOST = 'visiblethinking.com'                 # Symbolic name meaning the local host
 PORT = 13208               # Arbitrary non-privileged port
 s = None
+open("../logs/sbsdc.log", "a").write("\n-----------------------------------------------------\n%s: Startup, checking core and scanning modules.\n" % datetime.datetime.now())
+from modules import *
+from geocode import *
 for res in socket.getaddrinfo(HOST, PORT, socket.AF_UNSPEC, socket.SOCK_STREAM, 0, socket.AI_PASSIVE):
     af, socktype, proto, canonname, sa = res
     try:

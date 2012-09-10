@@ -2,7 +2,7 @@
 # # # # # # # # # # # # # # # # # # # # # # 
 #
 # project: Smart Bus Stops Done Dirt Cheap
-# Title: example
+# title: example
 # file: example.py
 # description: example modulefor SBSDC
 # language: python
@@ -12,7 +12,7 @@
 # version: 1.0.0
 # notes: An example of what a module needs for input and output.
 #
-# Keywords: example, test
+# keywords: example, test
 #
 # # # # # # # # # # # # # # # # # # # # # #
 import sys

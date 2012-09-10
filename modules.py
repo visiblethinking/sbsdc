@@ -26,20 +26,20 @@ for module in os.listdir("%s/modules" % os.getcwd()):
    x = ''
    f = open("modules/%s" % module, 'r')
    for line in f.readlines():
-      if "Title" in line:
-         y = line.split("Title: ")[1][:-1]
+      if "title" in line:
+         y = line.split("title: ")[1][:-1]
          module_name.append(y.lower())
-         x = line.split("Title: ")[1][:-1].lower()
-      if "# Language:" in line:
-         y = line.split("Language: ")[1][:-1]
+         x = line.split("title: ")[1][:-1].lower()
+      if "# language:" in line:
+         y = line.split("language: ")[1][:-1]
          module_lang[x] = y.lower()
          lang = ''
-      if "# Keywords:" in line:
-         y = line.split("Keywords: ")[1][:-1]
+      if "# keywords:" in line:
+         y = line.split("keywords: ")[1][:-1]
          module_keys[x] = y.lower()
-   print "\nOpening file modules/%s. written in %s with keywords: %s." % (module, module_lang[x], module_keys[x])
+   open("../logs/sbsdc.log", "a").write("Opening file modules/%s. written in %s with keywords: %s.\n" % (module, module_lang[x], module_keys[x]))
    if oct(os.stat("modules/%s" % module)[0]) != oct(33277):
-      print "Module %s has file permissions %s, fixing. . . " % (module, oct(os.stat("modules/%s" % module)[0]))
+      open("../logs/sbsdc.log", "a").write("Module %s has file permissions %s, fixing. . . \n" % (module, oct(os.stat("modules/%s" % module)[0])))
       os.system("chmod 775 modules/%s" % module)
 
 # sub that forks off a call to external module
@@ -49,7 +49,7 @@ def run_module(name, location, message):
     x = language_map[module_lang[name.lower()]]
     lang = x.split("|")[1]
     prog = x.split("|")[0]
-    process = subprocess.Popen(["%s" % prog,"/var/www/smartbusstop.com/sbsdc/modules/%s.%s" % (name.lower(), lang)], stdin=PIPE, stdout=PIPE, shell=False)
+    process = subprocess.Popen(["%s" % prog,"/var/www/smartbusstop.com/sbsdc/modules/%s.%s" % (name.lower(), lang), location, message], stdin=PIPE, stdout=PIPE, shell=False)
     output = ''
     while True:
       out = process.stdout.read(1)
