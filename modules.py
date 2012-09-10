@@ -49,7 +49,7 @@ def run_module(name, location, message):
     x = language_map[module_lang[name.lower()]]
     lang = x.split("|")[1]
     prog = x.split("|")[0]
-    process = subprocess.Popen(["%s" % prog,"modules/%s.%s" % (name.lower(), lang), location, message], stdin=PIPE, stdout=PIPE, shell=False)
+    process = subprocess.Popen(["%s" % prog,"%s/modules/%s.%s" % (os.getcwd(), name.lower(), lang), location, message], stdin=PIPE, stdout=PIPE, shell=False)
     output = ''
     while True:
       out = process.stdout.read(1)

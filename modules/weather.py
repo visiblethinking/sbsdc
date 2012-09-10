@@ -1,3 +1,24 @@
+#!/usr/bin/python
+# # # # # # # # # # # # # # # # # # # # # # 
+#
+# project: Smart Bus Stops Done Dirt Cheap
+# title: weather
+# file: weather.py
+# description: Weather modulefor SBSDC
+# language: python
+# 
+# authors: Andrew Hyder
+# date: 9/9/2012
+# version: 1.0.0
+# notes: fetches and sends latest weather forecast
+#
+# keywords: weather, forecast
+#
+# # # # # # # # # # # # # # # # # # # # # #
+import sys
+args = sys.argv
+
+
 # An easy way to do it
 import requests
 
