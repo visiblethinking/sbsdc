@@ -16,9 +16,8 @@
 # search modules/ directory and determine name, language and keywords to available mods
 
 import os
+import sys
 import subprocess
-from signal import signal, SIGPIPE, SIG_DFL
-signal(SIGPIPE,SIG_DFL)
 
 module_name = []
 module_lang = {}
@@ -28,13 +27,16 @@ for module in os.listdir("%s/modules" % os.getcwd()):
    f = open("modules/%s" % module, 'r')
    for line in f.readlines():
       if "Title" in line:
-         module_name.append(line.split("Title: ")[1][:-1])
-         x = line.split("Title: ")[1][:-1]
+         y = line.split("Title: ")[1][:-1]
+         module_name.append(y.lower())
+         x = line.split("Title: ")[1][:-1].lower()
       if "# Language:" in line:
-         module_lang[x] = line.split("Language: ")[1][:-1]
+         y = line.split("Language: ")[1][:-1]
+         module_lang[x] = y.lower()
          lang = ''
       if "# Keywords:" in line:
-         module_keys[x] = line.split("Keywords: ")[1][:-1]
+         y = line.split("Keywords: ")[1][:-1]
+         module_keys[x] = y.lower()
    print "\nOpening file modules/%s. written in %s with keywords: %s." % (module, module_lang[x], module_keys[x])
    if oct(os.stat("modules/%s" % module)[0]) != oct(33277):
       print "Module %s has file permissions %s, fixing. . . " % (module, oct(os.stat("modules/%s" % module)[0]))
@@ -44,8 +46,19 @@ for module in os.listdir("%s/modules" % os.getcwd()):
 def run_module(name, location, message):
     language_map = { 'python' : 'python|py' , 'perl' : 'perl|pl' , 'php' : 'php|php'}
     PIPE = subprocess.PIPE
-    p = subprocess.Popen(["python","/var/www/smartbusstop.com/sbsdc/modules/weather.py"], stdin=PIPE, stdout=PIPE, shell=False)
-    p.stdin.write("10")
-    p.stdin.flush()
-    print p.stdout.read() 
+    x = language_map[module_lang[name.lower()]]
+    lang = x.split("|")[1]
+    prog = x.split("|")[0]
+    process = subprocess.Popen(["%s" % prog,"/var/www/smartbusstop.com/sbsdc/modules/%s.%s" % (name.lower(), lang)], stdin=PIPE, stdout=PIPE, shell=False)
+    output = ''
+    while True:
+      out = process.stdout.read(1)
+      output += out
+      if out == '' and process.poll() != None:
+          break
+      if out != '':
+          #sys.stdout.write(out)
+          sys.stdout.flush()
+    for x in output.split("\n"):
+      print x
     os._exit(0)
