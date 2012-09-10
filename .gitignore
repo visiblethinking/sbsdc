@@ -1,3 +1,8 @@
+# Komodo Project files
 sbsdc.komodoproject
+
+#automatially created lof files
 sbsdc.log
-.DS_Store 
+
+#OS specific files
+.DS_Store
