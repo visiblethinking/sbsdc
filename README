@@ -1,0 +1,20 @@
+##  Copyright (c) 2012 Visible Thinking
+##
+
+# This file contains a couple of simple examples of how to configure and use
+# Smart Bus Stop Done Cheap program and its modules.
+#
+# SBSDC code in this directory:
+#  sbsdc.py - Core program
+#  modules.py - Slave program that handles modules
+#  geocode.py - Slave program that handles geolocation
+#  
+
+#
+# SBSDC
+#
+
+# This is a simple example that shows how to configure and send messages to
+# SBSDC.
+
+
