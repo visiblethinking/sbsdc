@@ -1,5 +1,6 @@
 # Komodo Project files
 sbsdc.komodoproject
+*.pyc
 
 #automatially created lof files
 sbsdc.log
