@@ -16,9 +16,9 @@
 import urllib, simplejson
 
 # sub that does lookup of geolocation and retuns lat, long
-def get_location(bus_stop_id):
+def get_location(stop_id):
     get_geo_url = 'http://ondrae.cartodb.com/api/v2/sql?q=SELECT%20latitude,%20longitude%20FROM%20sf_bus_stops%20WHERE%20stopid%20=%20'
-    get_geo_url = get_geo_url + str(bus_stop_url)
+    get_geo_url = get_geo_url + str(stop_id)
     response = urllib.urlopen(get_geo_url)
     for line in response:
     	response_dict = simplejson.loads(line)
