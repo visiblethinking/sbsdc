@@ -58,13 +58,13 @@ while 1:
 	    message = x[5:]
 	if "from=" in x.lower():
 	    sender = x[8:]
-    module = message.split("+")[0]
+    module = message.split("+")[1]
     geo = get_location(message.split("+")[0])
-    message = " ".join(message.split("+")[1:])
+    message = " ".join(message.split("+")[2:])
     open("../logs/sbsdc.log", "a").write("%s: %s | %s | %s\n" % (datetime.datetime.now(), sender, module, message))
     newpid = os.fork()
     if newpid == 0:
-         run_module(module, geo , message)
+         run_module(module, geo , message, sender)
     else:
          pids = (os.getpid(), newpid)
     if raw_input( ) == 'q': break

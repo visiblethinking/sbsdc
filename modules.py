@@ -46,7 +46,7 @@ for module in os.listdir("%s/modules" % os.getcwd()):
       os.system("chmod 775 modules/%s" % module)
 
 # sub that forks off a call to external module
-def run_module(name, location, message):
+def run_module(name, location, message, sms):
     language_map = { 'python' : 'python|py' , 'perl' : 'perl|pl' , 'php' : 'php|php'}
     PIPE = subprocess.PIPE
     x = language_map[module_lang[name.lower()]]
@@ -71,7 +71,7 @@ def run_module(name, location, message):
     
     username = "AC47761615be8d2db6fcf6512360fb7815"
     password = "89a918aa03f5c16d5f8dac2bb69c0431"
-    params = {'From' : '14154187890', 'To' : '7655327701', 'Body' : 'Testing it all.'}
+    params = {'From' : '14154187890', 'To' : sms, 'Body' : y}
     params = urllib.urlencode(params)
     
     conn = httplib.HTTPSConnection("api.twilio.com")
