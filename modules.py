@@ -67,7 +67,7 @@ def run_module(name, location, message, sms):
     for x in output.split("\n"):
        y+=x
     print y   
-    os._exit(0)
+
     
     username = "AC47761615be8d2db6fcf6512360fb7815"
     password = "89a918aa03f5c16d5f8dac2bb69c0431"
@@ -84,3 +84,4 @@ def run_module(name, location, message, sms):
         print data
     else:
         print "Error updating..."
+        os._exit(0) 
