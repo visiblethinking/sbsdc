@@ -53,7 +53,7 @@ def run_module(name, location, message, sms):
     lang = x.split("|")[1]
     prog = x.split("|")[0]
     print "%s" % prog,"%s/modules/%s.%s" % (os.getcwd(), name.lower(), lang), message
-    process = subprocess.Popen(["%s" % prog,"%s/modules/%s.%s" % (os.getcwd(), name.lower(), lang), message], stdin=PIPE, stdout=PIPE, shell=False)
+    process = subprocess.Popen(["%s" % prog,"%s/modules/%s.%s" % (os.getcwd(), name.lower(), lang), location[0], location[1], message], stdin=PIPE, stdout=PIPE, shell=False)
     output = ''
     while True:
       out = process.stdout.read(1)
@@ -73,6 +73,8 @@ def run_module(name, location, message, sms):
     password = "89a918aa03f5c16d5f8dac2bb69c0431"
     params = {'From' : '14154187890', 'To' : sms, 'Body' : y}
     params = urllib.urlencode(params)
+    auth = base64.encodestring("%s:%s" % (username, password)).replace('\n', '')
+    headers = {"Authorization" : "Basic %s" % auth, 'Content-Type': 'application/x-www-form-urlencoded'}
     
     conn = httplib.HTTPSConnection("api.twilio.com")
     conn.request("POST", "/2010-04-01/Accounts/AC47761615be8d2db6fcf6512360fb7815/SMS/Messages.xml", params, headers)

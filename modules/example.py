@@ -18,4 +18,4 @@
 import sys
 #args = sys.argv
 
-print "this is an example"
+print "Visible Thinking is AWESOME!"
