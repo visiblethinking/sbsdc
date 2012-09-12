@@ -22,7 +22,7 @@ def get_location(stop_id):
     response = urllib.urlopen(get_geo_url)
     for line in response:
     	response_dict = simplejson.loads(line)
-    geo_lat = response_dict['rows'][0]['latitude']
-    geo_long = response_dict['rows'][0]['longitude']
+    geo_lat = str(response_dict['rows'][0]['latitude'])
+    geo_long = str(response_dict['rows'][0]['longitude'])
     lat_long = [geo_lat,geo_long]
     return lat_long
