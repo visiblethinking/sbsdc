@@ -65,8 +65,7 @@ def run_module(name, location, message, sms):
           sys.stdout.flush()
     y=""
     for x in output.split("\n"):
-       y+=x
-    print y   
+       y+=x 
 
     
     username = "AC47761615be8d2db6fcf6512360fb7815"
@@ -83,7 +82,7 @@ def run_module(name, location, message, sms):
     conn.close()
     
     if data:
-        print data
+        1;
     else:
         print "Error updating..."
         os._exit(0) 
