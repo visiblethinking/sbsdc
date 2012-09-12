@@ -26,7 +26,7 @@ for line in response:
 
 today = str(datetime.date.today())
 
-for day in weather_json['data']['weather']:
+for day in response_dict['data']['weather']:
 	if day['date'] == today:
 		print day['tempMaxF'] + ' - ' + day['tempMinF']
 		print day['weatherDesc'][0]['value']
