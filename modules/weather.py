@@ -15,24 +15,18 @@
 # keywords: weather, forecast
 #
 # # # # # # # # # # # # # # # # # # # # # #
-import sys, urllib2
-args = sys.argv
+import sys, urllib, simplejson, datetime
+lat = sys.argv[1]
+lon = sys.argv[2]
+message = sys.argv[3]
 
-print 'Fuck You.'
+response = urllib.urlopen('http://free.worldweatheronline.com/feed/weather.ashx?q='+str(lat)+','+str(lon)+'&format=json&num_of_days=5&key=4e11214676001957120909')
+for line in response:
+	response_dict = simplejson.loads(line)
 
-# # An easy way to do it
-# r = urllib2.openurl('http://free.worldweatheronline.com/feed/weather.ashx?q=37.78,122.42&format=json&num_of_days=5&key=4e11214676001957120909')
+today = str(datetime.date.today())
 
-# # Or using json module
-# import json
-
-# weather_text = r.text
-# weather_json = json.loads(weather_text)
-
-# for day in weather_json['data']['weather']:
-# 	print day['date'] + ' ' + day['tempMaxF']
-# 	print day['weatherDesc'][0]['value']
-
-
-
-
+for day in weather_json['data']['weather']:
+	if day['date'] == today:
+		print day['tempMaxF'] + ' - ' day['tempMinF']
+		print day['weatherDesc'][0]['value']
