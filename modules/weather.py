@@ -28,6 +28,5 @@ today = str(datetime.date.today())
 
 for day in response_dict['data']['weather']:
 	if day['date'] == today:
-		print day['tempMaxF'] + ' - ' + day['tempMinF']
-		print '%0a'
+		print day['tempMaxF'] + ' - ' + day['tempMinF']  + '\n'
 		print day['weatherDesc'][0]['value']

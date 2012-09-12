@@ -23,7 +23,7 @@ sys.path.append("/var/www/smartbusstop.com/sbsdc")
 HOST = 'visiblethinking.com'                 # Symbolic name meaning the local host
 PORT = 13208               # Arbitrary non-privileged port
 s = None
-open("../logs/sbsdc.log", "a").write("\n-----------------------------------------------------\n%s: Startup, checking core and scanning modules.\n" % datetime.datetime.now())
+open("/var/www/smartbusstop.com/logs/sbsdc.log", "a").write("\n-----------------------------------------------------\n%s: Startup, checking core and scanning modules.\n" % datetime.datetime.now())
 from modules import *
 from geocode import *
 for res in socket.getaddrinfo(HOST, PORT, socket.AF_UNSPEC, socket.SOCK_STREAM, 0, socket.AI_PASSIVE):
@@ -61,7 +61,7 @@ while 1:
     module = message.split("+")[1]
     geo = get_location(message.split("+")[0])
     message = " ".join(message.split("+")[2:])
-    open("../logs/sbsdc.log", "a").write("%s: %s | %s | %s\n" % (datetime.datetime.now(), sender, module, message))
+    open("/var/www/smartbusstop.com/logs/sbsdc.log", "a").write("%s: %s | %s | %s\n" % (datetime.datetime.now(), sender, module, message))
     newpid = os.fork()
     if newpid == 0:
          run_module(module, geo , message, sender)
