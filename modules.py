@@ -18,6 +18,9 @@
 import os
 import sys
 import subprocess
+import httplib
+import base64
+import urllib
 
 module_name = []
 module_lang = {}
@@ -49,7 +52,8 @@ def run_module(name, location, message):
     x = language_map[module_lang[name.lower()]]
     lang = x.split("|")[1]
     prog = x.split("|")[0]
-    process = subprocess.Popen(["%s" % prog,"%s/modules/%s.%s" % (os.getcwd(), name.lower(), lang), location, message], stdin=PIPE, stdout=PIPE, shell=False)
+    print "%s" % prog,"%s/modules/%s.%s" % (os.getcwd(), name.lower(), lang), message
+    process = subprocess.Popen(["%s" % prog,"%s/modules/%s.%s" % (os.getcwd(), name.lower(), lang), message], stdin=PIPE, stdout=PIPE, shell=False)
     output = ''
     while True:
       out = process.stdout.read(1)
@@ -59,6 +63,24 @@ def run_module(name, location, message):
       if out != '':
           #sys.stdout.write(out)
           sys.stdout.flush()
+    y=""
     for x in output.split("\n"):
-      print x
+       y+=x
+    print y   
     os._exit(0)
+    
+    username = "AC47761615be8d2db6fcf6512360fb7815"
+    password = "89a918aa03f5c16d5f8dac2bb69c0431"
+    params = {'From' : '14154187890', 'To' : '7655327701', 'Body' : 'Testing it all.'}
+    params = urllib.urlencode(params)
+    
+    conn = httplib.HTTPSConnection("api.twilio.com")
+    conn.request("POST", "/2010-04-01/Accounts/AC47761615be8d2db6fcf6512360fb7815/SMS/Messages.xml", params, headers)
+    response = conn.getresponse()
+    data = response.read()
+    conn.close()
+    
+    if data:
+        print data
+    else:
+        print "Error updating..."

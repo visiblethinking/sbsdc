@@ -16,6 +16,6 @@
 #
 # # # # # # # # # # # # # # # # # # # # # #
 import sys
-args = sys.argv
+#args = sys.argv
 
 print "this is an example"
