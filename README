@@ -22,3 +22,9 @@
 
 # Requirements: Python and the ability to open ports
 # The modules will accept most scripting languages, more can be added in modules.py
+
+
+# Instructions:
+First word in text message needs to be the bus stop id.
+Second should be the type of questions.
+Anything after can be the question.
