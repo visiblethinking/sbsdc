@@ -28,5 +28,5 @@ today = str(datetime.date.today())
 
 for day in weather_json['data']['weather']:
 	if day['date'] == today:
-		print day['tempMaxF'] + ' - ' day['tempMinF']
+		print day['tempMaxF'] + ' - ' + day['tempMinF']
 		print day['weatherDesc'][0]['value']
