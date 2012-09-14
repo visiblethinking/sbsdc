@@ -19,17 +19,15 @@ if __name__ == "__main__":
     import datetime
     import os
     import time
-    sys.path.append("/var/www/smartbusstop.com/sbsdc")
+    from configuration import *
     
     # open port and recieve incomming connections   
-    HOST = 'visiblethinking.com'                 # Symbolic name meaning the local host
-    PORT = 13208               # Arbitrary non-privileged port
-    s = None
-    open("/var/www/smartbusstop.com/logs/sbsdc.log", "a").write("\n-----------------------------------------------------\n%s: Startup, checking core and scanning modules.\n" % datetime.datetime.now())
+    open(logfile, "a").write("\n-----------------------------------------------------\n%s: Startup, checking core and scanning modules.\n" % datetime.datetime.now())
     from modules import *
     from geocode import *
+    s = None
     while not s:
-	for res in socket.getaddrinfo(HOST, PORT, socket.AF_UNSPEC, socket.SOCK_STREAM, 0, socket.AI_PASSIVE):
+	for res in socket.getaddrinfo(hostname, port, socket.AF_UNSPEC, socket.SOCK_STREAM, 0, socket.AI_PASSIVE):
 	    af, socktype, proto, canonname, sa = res
 	    try:
 		s = socket.socket(af, socktype, proto)
@@ -45,8 +43,10 @@ if __name__ == "__main__":
 		continue
 	    break
 	if not s:
-	    print "Could not open socket, trying again."
-	    time.sleep(5)
+	    sys.stdout.write("Could not open socket. Maybe it is busy? I'll try again every 5 seconds. ")
+	    for x in range(10):
+		time.sleep(1)
+		sys.stdout.write(". ")
     conn, addr = s.accept()
     # we should fork here??
     
