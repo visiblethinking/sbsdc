@@ -16,9 +16,8 @@
 #
 # # # # # # # # # # # # # # # # # # # # # #
 import sys, urllib, simplejson, datetime
-lat = sys.argv[1]
-lon = sys.argv[2]
-message = sys.argv[3]
+lat = sys.argv[2]
+lon = sys.argv[3]
 
 get_hood_url = 'http://query.mapfluence.com/2.0/faa2473800838e5a0b407b40b3ab93ed/spatialquery.json?from=umi.neighborhoods.geometry&select=name'
 get_hood_url = get_hood_url + '&where=intersects({%22type%22:%22Point%22,%22coordinates%22:['+str(lat)+','+str(lon)+']})'
