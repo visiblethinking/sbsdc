@@ -15,17 +15,13 @@
 # keywords: LOLCAT
 #
 # # # # # # # # # # # # # # # # # # # # # #
-import sys
-lat = sys.argv[1]
-lon = sys.argv[2]
-message = sys.argv[3]
 
-lolcat = '''
-WHERE DA BUS?
+lolcat = """
+I CAN HAS BUS?
       _._     _,-'""`-._
      (,-.`._,'(       |\`-/|
          `-.-' \ )-`( , o o)
                `-    \`_`"'-
-'''
+"""
 
 print lolcat
