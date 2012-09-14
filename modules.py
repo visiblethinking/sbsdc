@@ -46,14 +46,14 @@ for module in os.listdir("%s/modules" % os.getcwd()):
       os.system("chmod 775 modules/%s" % module)
 
 # sub that forks off a call to external module
-def run_module(name, location, message, sms):
+def run_module(name, location, message, tosms):
     language_map = { 'python' : 'python|py' , 'perl' : 'perl|pl' , 'php' : 'php|php'}
     PIPE = subprocess.PIPE
     x = language_map[module_lang[name.lower()]]
     lang = x.split("|")[1]
     prog = x.split("|")[0]
     output = 'Thanks'
-    process = subprocess.Popen(["%s" % prog,"%s/modules/%s.%s" % (os.getcwd(), name.lower(), lang), location[0], location[1], message], stdin=PIPE, stdout=PIPE, shell=False)
+    process = subprocess.Popen(["%s" % prog,"%s/modules/%s.%s" % (os.getcwd(), name.lower(), lang), tosms, location[0], location[1], message], stdin=PIPE, stdout=PIPE, shell=False)
     while True:
       out = process.stdout.read(1)
       output += out
