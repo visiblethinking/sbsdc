@@ -27,6 +27,15 @@ for line in response:
 today = str(datetime.date.today())
 
 for day in response_dict['data']['weather']:
+	
 	if day['date'] == today:
-		print day['tempMaxF'] + ' - ' + day['tempMinF']  + '\n'
-		print day['weatherDesc'][0]['value']
+		print 'Today:' + day['tempMinF'] + ' - ' + day['tempMaxF'] 
+		print '***Next 4***'
+	else:
+		print day['tempMinF'] + ' - ' + day['tempMaxF']
+		
+		
+		#print day['tempMaxF'] + ' - ' + day['tempMinF']  + '\n'
+		#print day['weatherDesc'][0]['value']
+		
+		
