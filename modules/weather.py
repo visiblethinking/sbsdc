@@ -16,26 +16,26 @@
 #
 # # # # # # # # # # # # # # # # # # # # # #
 import sys, urllib, simplejson, datetime
-lat = sys.argv[1]
-lon = sys.argv[2]
-message = sys.argv[3]
+phoneNum = sys.argv[1]
+lat = sys.argv[2]
+lon = sys.argv[3]
+message = sys.argv[4]
 
 response = urllib.urlopen('http://free.worldweatheronline.com/feed/weather.ashx?q='+str(lat)+','+str(lon)+'&format=json&num_of_days=5&key=4e11214676001957120909')
 for line in response:
 	response_dict = simplejson.loads(line)
 
 today = str(datetime.date.today())
+retString = ''
 
 for day in response_dict['data']['weather']:
 	
 	if day['date'] == today:
-		print 'Today:' + day['tempMinF'] + ' - ' + day['tempMaxF'] 
-		print '***Next 4***'
+		retString += 'Today:' + day['tempMinF'] + '-' + day['tempMaxF'] + '\n'
+		retString += 'Next 4 days:' 
 	else:
-		print day['tempMinF'] + ' - ' + day['tempMaxF']
-		
-		
-		#print day['tempMaxF'] + ' - ' + day['tempMinF']  + '\n'
-		#print day['weatherDesc'][0]['value']
-		
-		
+		retString += day['tempMinF'] + '-' + day['tempMaxF'] + ';'
+
+retString = retString[:-1]
+
+print retString
