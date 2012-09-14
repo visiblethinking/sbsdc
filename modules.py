@@ -25,9 +25,9 @@ import urllib
 module_name = []
 module_lang = {}
 module_keys = {}
-for module in os.listdir("/var/www/smartbusstop.com/sbsdc/modules"):
+for module in os.listdir("%s/modules" % os.getcwd()):
    x = ''
-   f = open("/var/www/smartbusstop.com//sbsdc/modules/%s" % module, 'r')
+   f = open("modules/%s" % module, 'r')
    for line in f.readlines():
       if "title" in line:
          y = line.split("title: ")[1][:-1]
@@ -40,9 +40,9 @@ for module in os.listdir("/var/www/smartbusstop.com/sbsdc/modules"):
       if "# keywords:" in line:
          y = line.split("keywords: ")[1][:-1]
          module_keys[x] = y.lower()
-   open("/var/www/smartbusstop.com/logs/sbsdc.log", "a").write("Opening file modules/%s. written in %s with keywords: %s.\n" % (module, module_lang[x], module_keys[x]))
-   if oct(os.stat("/var/www/smartbusstop.com/sbsdc/modules/%s" % module)[0]) != oct(33277):
-      open("/var/www/smartbusstop.com/logs/sbsdc.log", "a").write("Module %s has file permissions %s, fixing. . . \n" % (module, oct(os.stat("modules/%s" % module)[0])))
+   open("../logs/sbsdc.log", "a").write("Opening file modules/%s. written in %s with keywords: %s.\n" % (module, module_lang[x], module_keys[x]))
+   if oct(os.stat("modules/%s" % module)[0]) != oct(33277):
+      open("../logs/sbsdc.log", "a").write("Module %s has file permissions %s, fixing. . . \n" % (module, oct(os.stat("modules/%s" % module)[0])))
       os.system("chmod 775 modules/%s" % module)
 
 # sub that forks off a call to external module
@@ -52,8 +52,8 @@ def run_module(name, location, message, sms):
     x = language_map[module_lang[name.lower()]]
     lang = x.split("|")[1]
     prog = x.split("|")[0]
-    process = subprocess.Popen(["%s" % prog,"%s/modules/%s.%s" % ("/var/www/smartbusstop.com/sbsdc", name.lower(), lang), location[0], location[1], message], stdin=PIPE, stdout=PIPE, shell=False)
-    output = ''
+    output = 'Thanks'
+    process = subprocess.Popen(["%s" % prog,"%s/modules/%s.%s" % (os.getcwd(), name.lower(), lang), location[0], location[1], message], stdin=PIPE, stdout=PIPE, shell=False)
     while True:
       out = process.stdout.read(1)
       output += out
