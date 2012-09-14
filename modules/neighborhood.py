@@ -20,11 +20,15 @@ lat = sys.argv[2]
 lon = sys.argv[3]
 
 get_hood_url = 'http://query.mapfluence.com/2.0/faa2473800838e5a0b407b40b3ab93ed/spatialquery.json?from=umi.neighborhoods.geometry&select=name'
-get_hood_url = get_hood_url + '&where=intersects({%22type%22:%22Point%22,%22coordinates%22:['+str(lat)+','+str(lon)+']})'
+get_hood_url = get_hood_url + '&where=intersects({%22type%22:%22Point%22,%22coordinates%22:['+str(lon)+','+str(lat)+']})'
 
 response = urllib.urlopen(get_hood_url)
-for line in response:
-	response_dict = simplejson.loads(line)
+if response:
+	for line in response:
+		response_dict = simplejson.loads(line)
+else:
+	print "Andrew sucks"
 
 for feature in response_dict['features']:
 	print feature['properties']['name']
+

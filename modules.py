@@ -52,7 +52,7 @@ def run_module(name, location, message, tosms):
     x = language_map[module_lang[name.lower()]]
     lang = x.split("|")[1]
     prog = x.split("|")[0]
-    output = 'Thanks'
+    output = ''
     process = subprocess.Popen(["%s" % prog,"%s/modules/%s.%s" % (os.getcwd(), name.lower(), lang), tosms, location[0], location[1], message], stdin=PIPE, stdout=PIPE, shell=False)
     while True:
       out = process.stdout.read(1)
@@ -66,7 +66,7 @@ def run_module(name, location, message, tosms):
 
     username = "AC47761615be8d2db6fcf6512360fb7815"
     password = "89a918aa03f5c16d5f8dac2bb69c0431"
-    params = {'From' : '14154187890', 'To' : sms, 'Body' : output}
+    params = {'From' : '14154187890', 'To' : tosms, 'Body' : output}
     params = urllib.urlencode(params)
     auth = base64.encodestring("%s:%s" % (username, password)).replace('\n', '')
     headers = {"Authorization" : "Basic %s" % auth, 'Content-Type': 'application/x-www-form-urlencoded'}
