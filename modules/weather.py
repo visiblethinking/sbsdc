@@ -25,17 +25,16 @@ for line in response:
 	response_dict = simplejson.loads(line)
 
 today = str(datetime.date.today())
+retString = ''
 
 for day in response_dict['data']['weather']:
 	
 	if day['date'] == today:
-		print 'Today:' + day['tempMinF'] + ' - ' + day['tempMaxF'] 
-		print '***Next 4***'
+		retString += 'Today:' + day['tempMinF'] + '-' + day['tempMaxF'] + '\n'
+		retString += 'Next 4 days:' 
 	else:
-		print day['tempMinF'] + ' - ' + day['tempMaxF']
-		
-		
-		#print day['tempMaxF'] + ' - ' + day['tempMinF']  + '\n'
-		#print day['weatherDesc'][0]['value']
-		
-		
+		retString += day['tempMinF'] + '-' + day['tempMaxF'] + ';'
+
+retString = retString[:-1]
+
+print retString
