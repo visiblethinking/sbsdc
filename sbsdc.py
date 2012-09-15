@@ -28,9 +28,12 @@ def accept_conn(data):
     open(logfile, "a").write("%s: %s | %s | %s\n" % (datetime.datetime.now(), sender, module, message))
     newpid = os.fork()
     if newpid == 0:
-	 run_module(module, geo , message, sender)
+	open(logfile, "a").write("%s" % datetime.datetime.now(), "ERROR!!! Module run failed on PID\n")
+	os.exit()
     else:
-	 pids = (os.getpid(), newpid)     
+	pids = (os.getpid(), newpid)
+	open(logfile, "a").write("%s: Running module %s\n" % (datetime.datetime.now(), module))
+	run_module(module, geo , message, sender, logfile)
 
 if __name__ == "__main__":
     import sys
@@ -45,18 +48,27 @@ if __name__ == "__main__":
     open(logfile, "a").write("\n-----------------------------------------------------\n%s: Startup, checking core and scanning modules.\n" % datetime.datetime.now())
     from modules import *
     from geocode import *
-    soc = None
     backlog = 5 
     size = 1024 
-    while not soc:
-	soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
-	soc.bind((hostname,port)) 
-	soc.listen(backlog)
-	print "Server is now running"
-	while 1: 
-	    client, address = soc.accept() 
-	    data = client.recv(size) 
-	    if data: 
-		accept_conn(data) 
-	    client.close()
+    while 1:
+	try:
+	    soc = None
+	    soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+	    soc.bind((hostname,port)) 
+	    soc.listen(backlog)
+	    print "Server is now running"
+	    try:
+		while 1: 
+		    client, address = soc.accept() 
+		    data = client.recv(size) 
+		    if data: 
+			accept_conn(data) 
+		    client.close()
+	    except:
+		open(logfile, "a").write("%s: ERROR!!! Server failed to run module: %s\n" % (datetime.datetime.now(), client.recv(size)))
+	except:
+	    open(logfile, "a").write("%s: ERROR!!! Server failed to start.%s\n" % (datetime.datetime.now(), soc))
+	    soc = None
+	print "Port busy; lets try again in 5 seconds"
+	time.sleep(5)
     # we should fork here??

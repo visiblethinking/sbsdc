@@ -14,9 +14,12 @@
 # # # # # # # # # # # # # # # # # # # # # #
 
 # TCP/IP hostname and port server listens for incomming Twilio sms messages on
+global hostname
 hostname = "visiblethinking.com"
+global port
 port = 13208
 
 # Logging file
+global logfile
 logfile = "/var/www/smartbusstop.com/logs/sbsdc.log"
 
