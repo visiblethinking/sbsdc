@@ -18,11 +18,37 @@
 import sys
 import urllib
 import simplejson
+from geopy import geocoders
 
-phoneNum = sys.argv[1]
-srcLat = sys.argv[2]
-srcLon = sys.argv[3]
-message = sys.argv[4]
+progName = sys.argv[0]
+argList = sys.argv[1:]
+argCount = len(argList)
+messageList=[]
+messageStr=''
+
+for i in range(argCount):
+    if i == 0:
+        phoneNum = argList[i]
+    elif i == 1:
+        srcLat = argList[i]
+    elif i == 2:
+        srcLon = argList[i]
+    else:
+        messageList.append(argList[i])
+        
+
+def is_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+    
+    
+for item in messageList:
+    messageStr += item + ' '
+
+print messageStr
 
 destLat = 37.5
 destLon = -122.5
