@@ -13,63 +13,62 @@
 #
 # # # # # # # # # # # # # # # # # # # # # # 
 
+def accept_conn(data):
+    references = data.split('&')
+    message = ""
+    sender = ""
+    for x in references:
+	if "body=" in x.lower():
+	    message = x[5:]
+	if "from=" in x.lower():
+	    sender = x[8:]
+    module = message.split("+")[1]
+    geo = get_location(message.split("+")[0])
+    message = " ".join(message.split("+")[2:])
+    open(logfile, "a").write("%s: %s | %s | %s\n" % (datetime.datetime.now(), sender, module, message))
+    newpid = os.fork()
+    if newpid == 0:
+	open(logfile, "a").write("%s" % datetime.datetime.now(), "ERROR!!! Module run failed on PID\n")
+	os.exit()
+    else:
+	pids = (os.getpid(), newpid)
+	open(logfile, "a").write("%s: Running module %s\n" % (datetime.datetime.now(), module))
+	run_module(module, geo , message, sender, logfile)
+
 if __name__ == "__main__":
-    import socket
     import sys
     import datetime
     import os
     import time
+    import socket
+    import threading
     from configuration import *
     
     # open port and recieve incomming connections   
     open(logfile, "a").write("\n-----------------------------------------------------\n%s: Startup, checking core and scanning modules.\n" % datetime.datetime.now())
     from modules import *
     from geocode import *
-    s = None
-    while not s:
-	for res in socket.getaddrinfo(hostname, port, socket.AF_UNSPEC, socket.SOCK_STREAM, 0, socket.AI_PASSIVE):
-	    af, socktype, proto, canonname, sa = res
-	    try:
-		s = socket.socket(af, socktype, proto)
-	    except socket.error, msg:
-		s = None
-		continue
-	    try:
-		s.bind(sa)
-		s.listen(1)
-	    except socket.error, msg:
-		s.close()
-		s = None
-		continue
-	    break
-	if not s:
-	    sys.stdout.write("Could not open socket. Maybe it is busy? I'll try again every 5 seconds. ")
-	    for x in range(10):
-		time.sleep(1)
-		sys.stdout.write(". ")
-    conn, addr = s.accept()
-    # we should fork here??
-    
+    backlog = 5 
+    size = 1024 
     while 1:
-	data = conn.recv(1024)
-	if not data: break
-	references = data.split('&')
-	message = ""
-	sender = ""
-	for x in references:
-	    if "body=" in x.lower():
-		message = x[5:]
-	    if "from=" in x.lower():
-		sender = x[8:]
-	module = message.split("+")[1]
-	geo = get_location(message.split("+")[0])
-	message = " ".join(message.split("+")[2:])
-	open("/var/www/smartbusstop.com/logs/sbsdc.log", "a").write("%s: %s | %s | %s\n" % (datetime.datetime.now(), sender, module, message))
-	newpid = os.fork()
-	if newpid == 0:
-	     run_module(module, geo , message, sender)
-	else:
-	     pids = (os.getpid(), newpid)
-	if raw_input( ) == 'q': break
-    conn.close()
-    os.exit()
+	try:
+	    soc = None
+	    soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+	    soc.bind((hostname,port)) 
+	    soc.listen(backlog)
+	    print "Server is now running"
+	    try:
+		while 1: 
+		    client, address = soc.accept() 
+		    data = client.recv(size) 
+		    if data: 
+			accept_conn(data) 
+		    client.close()
+	    except:
+		open(logfile, "a").write("%s: ERROR!!! Server failed to run module: %s\n" % (datetime.datetime.now(), client.recv(size)))
+	except:
+	    open(logfile, "a").write("%s: ERROR!!! Server failed to start.%s\n" % (datetime.datetime.now(), soc))
+	    soc = None
+	print "Port busy; lets try again in 5 seconds"
+	time.sleep(5)
+    # we should fork here??
