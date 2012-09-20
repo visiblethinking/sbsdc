@@ -15,6 +15,8 @@
 # keywords: walking, walk, onfoot, walkingdir
 #
 # # # # # # # # # # # # # # # # # # # # # #
+
+# Usage: walkingDirections.py <phone#> <lat> <long> <message>
 import sys
 import urllib
 import simplejson
