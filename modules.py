@@ -63,27 +63,19 @@ for module in os.listdir("%s/modules" % os.getcwd()):
 def run_module(name, location, message, tosms, logfile):
    prog = langs[module_lang[name.lower()]].split("|")[0]
    lang = langs[module_lang[name.lower()]].split("|")[1]
-   output = None
+   myoutput = None
    try:
       PIPE = subprocess.PIPE
-      open(logfile, "a").write("%s: %s%s %s %s %s %s" % (datetime.datetime.now(), name.lower(), lang, tosms, location[0], location[1], message))
+      open(logfile, "a").write("%s: %s%s %s %s %s %s\n" % (datetime.datetime.now(), name.lower(), lang, tosms, location[0], location[1], message))
       process = subprocess.Popen(["%s" % prog, "%s/modules/%s%s" % (os.getcwd(), name.lower(), lang), tosms, location[0], location[1], message], stdin=PIPE, stdout=PIPE, shell=False)
    except:
       open(logfile, "a").write("%s: ERROR!!! Failed to run: %s%s" % (datetime.datetime.now(), name.lower(), lang), tosms, location[0], location[1], message)
    open(logfile, "a").write("%s: Running %s looking for %s.\n" % (datetime.datetime.now(), name.lower(), message))
-   while True:
-      out = process.stdout.read(1)
-      output += out
-      if out == '' and process.poll() != None:
-         break
-      if out != '':
-         #sys.stdout.write(out)
-         sys.stdout.flush()
-   y = None
+   myoutput = process.stdout.read()
 
    username = "AC47761615be8d2db6fcf6512360fb7815"
    password = "89a918aa03f5c16d5f8dac2bb69c0431"
-   params = {'From' : '14154187890', 'To' : tosms, 'Body' : output}
+   params = {'From' : '14154187890', 'To' : tosms, 'Body' : myoutput}
    params = urllib.urlencode(params)
    auth = base64.encodestring("%s:%s" % (username, password)).replace('\n', '')
    headers = {"Authorization" : "Basic %s" % auth, 'Content-Type': 'application/x-www-form-urlencoded'}
@@ -98,4 +90,3 @@ def run_module(name, location, message, tosms, logfile):
       y = data;
    else:
       print "Error updating..."
-   os._exit(0) 
