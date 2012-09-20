@@ -20,7 +20,6 @@
 import sys
 import urllib
 import simplejson
-from geopy import geocoders
 import urllib2
 
 progName = sys.argv[0]

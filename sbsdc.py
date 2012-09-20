@@ -69,6 +69,5 @@ if __name__ == "__main__":
 	except:
 	    open(logfile, "a").write("%s: ERROR!!! Server failed to start.%s\n" % (datetime.datetime.now(), soc))
 	    soc = None
-	print "Port busy; lets try again in 5 seconds"
-	time.sleep(5)
+	time.sleep(1)
     # we should fork here??
