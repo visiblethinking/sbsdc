@@ -13,6 +13,7 @@
 #
 # # # # # # # # # # # # # # # # # # # # # # 
 
+    
 def accept_conn(data):
     try:
 	references = data.split('&')
@@ -26,17 +27,21 @@ def accept_conn(data):
 	module = message.split("+")[1]
 	geo = get_location(message.split("+")[0])
 	message = " ".join(message.split("+")[2:])
-	open(logfile, "a").write("%s: %s | %s | %s\n" % (datetime.datetime.now(), sender, module, message))
+	#open(logfile, "a").write("%s: %s | %s | %s\n" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), sender, module, message))
 	newpid = os.fork()
 	if newpid == 0:
-	    open(logfile, "a").write("%s" % datetime.datetime.now(), "ERROR!!! Module run failed on PID\n")
+	    open(logfile, "a").write("%s" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "ERROR!!! Module run failed on PID\n")
 	    os.exit()
 	else:
 	    pids = (os.getpid(), newpid)
-	    open(logfile, "a").write("%s: Running module %s\n" % (datetime.datetime.now(), module))
-	    run_module(module, geo , message, sender, logfile)
+	    open(logfile, "a").write("%s: Running module %s\n" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), module))
+	    try:
+		run_module(module, geo , message, sender, logfile)
+	    except:
+		open(logfile, "a").write("%s: Failed in run_module.\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+
     except:
-	open(logfile, "a").write("Failed in accept_conn")
+	open(logfile, "a").write("%s: Failed in accept_conn\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
 if __name__ == "__main__":
     import sys
@@ -45,10 +50,27 @@ if __name__ == "__main__":
     import time
     import socket
     import threading
-    from configuration import *
+    
+    # Read config file and sset global standards
+    global hostname
+    global port
+    global logfile
+    try:
+	config = open('config','r').readlines()
+    except:
+	open(config, "a").write("%s: Unable to open configuration file.\n" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), sender, module, message))
+	os.exit()
+    for line in config:
+	x = line.split("=")
+	if x[0].lower() == "hostname":
+	    hostname = x[1].rstrip()
+	elif x[0].lower() == "port":
+	    port = x[1].rstrip()
+	elif x[0].lower() == "logfile":
+	    logfile = x[1].rstrip()
     
     # open port and recieve incomming connections   
-    open(logfile, "a").write("\n-----------------------------------------------------\n%s: Startup, checking core and scanning modules.\n" % datetime.datetime.now())
+    open(logfile, "w").write("\n-----------------------------------------------------\n%s: Startup, checking core and scanning modules.\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     from modules import *
     from geocode import *
     backlog = 5 
@@ -56,21 +78,22 @@ if __name__ == "__main__":
     while 1:
 	try:
 	    soc = None
+	    open(logfile, "a").write("%s: Starting server at %s:%s\n" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), hostname, port))
 	    soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
-	    soc.bind((hostname,port)) 
+	    port = int(float(port))
+	    soc.bind((hostname,port))
 	    soc.listen(backlog)
-	    print "Server is now running"
+	    print "Server is now running on %s:%s" % (hostname, port)
 	    try:
-		while 1: 
+		while 1:
 		    client, address = soc.accept() 
 		    data = client.recv(size) 
-		    if data: 
+		    if data:
 			accept_conn(data) 
 		    client.close()
 	    except:
-		open(logfile, "a").write("%s: ERROR!!! Server failed to run module: %s\n" % (datetime.datetime.now(), client.recv(size)))
+		open(logfile, "a").write("%s: ERROR!!! Server failed to run module: %s\n" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), client.recv(size)))
 	except:
-	    open(logfile, "a").write("%s: ERROR!!! Server failed to start.%s\n" % (datetime.datetime.now(), soc))
+	    print "%s: WARNING!!! Server failed to start.%s" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), soc)
 	    soc = None
 	time.sleep(1)
-    # we should fork here??
