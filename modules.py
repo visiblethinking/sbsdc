@@ -61,17 +61,19 @@ for module in os.listdir("%s/modules" % os.getcwd()):
 
 # sub that forks off a call to external module
 def run_module(name, location, message, tosms, logfile):
-   prog = langs[module_lang[name.lower()]].split("|")[0]
-   lang = langs[module_lang[name.lower()]].split("|")[1]
-   myoutput = None
    try:
+      prog = langs[module_lang[name.lower()]].split("|")[0]
+      lang = langs[module_lang[name.lower()]].split("|")[1]
+      myoutput = None
       PIPE = subprocess.PIPE
       open(logfile, "a").write("%s: %s%s %s %s %s %s\n" % (datetime.datetime.now(), name.lower(), lang, tosms, location[0], location[1], message))
       process = subprocess.Popen(["%s" % prog, "%s/modules/%s%s" % (os.getcwd(), name.lower(), lang), tosms, location[0], location[1], message], stdin=PIPE, stdout=PIPE, shell=False)
+      myoutput = process.stdout.read()
+      open(logfile, "a").write("%s: Running %s looking for %s.\n" % (datetime.datetime.now(), name.lower(), message))
    except:
       open(logfile, "a").write("%s: ERROR!!! Failed to run: %s%s" % (datetime.datetime.now(), name.lower(), lang), tosms, location[0], location[1], message)
-   open(logfile, "a").write("%s: Running %s looking for %s.\n" % (datetime.datetime.now(), name.lower(), message))
-   myoutput = process.stdout.read()
+      myoutput = "Sorry there was an error in your message."
+   
 
    username = "AC47761615be8d2db6fcf6512360fb7815"
    password = "89a918aa03f5c16d5f8dac2bb69c0431"
