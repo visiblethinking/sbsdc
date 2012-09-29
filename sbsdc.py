@@ -36,7 +36,13 @@ def accept_conn(data):
 	    pids = (os.getpid(), newpid)
 	    open(logfile, "a").write("%s: Running module %s\n" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), module))
 	    try:
-		run_module(module, geo , message, sender, logfile)
+		print "hi"
+		if NL == 1:
+		    print "yo"
+		    nl_data = nl_process(data,logfile,module_keys)
+		    run_module(nl_data[1], geo, nl_data[2], sender, logfile)    
+		else:
+		    run_module(module, geo , message, sender, logfile)
 	    except:
 		open(logfile, "a").write("%s: Failed in run_module.\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
@@ -55,6 +61,9 @@ if __name__ == "__main__":
     global hostname
     global port
     global logfile
+    global NL
+    NL=0
+    
     try:
 	config = open('config','r').readlines()
     except:
@@ -68,6 +77,9 @@ if __name__ == "__main__":
 	    port = x[1].rstrip()
 	elif x[0].lower() == "logfile":
 	    logfile = x[1].rstrip()
+	elif x[0].lower() == "natural language":
+	    if x[1].lower() == "on":
+		NL = 1
     
     # open port and recieve incomming connections   
     open(logfile, "w").write("\n-----------------------------------------------------\n%s: Startup, checking core and scanning modules.\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
