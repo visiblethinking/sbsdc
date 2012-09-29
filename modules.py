@@ -26,6 +26,7 @@ import urllib
 module_name = []
 module_lang = {}
 module_keys = {}
+global module_keys
 # Read modules/ directory and determine their name, language and keywords
 for module in os.listdir("%s/modules" % os.getcwd()):
    x = ''
