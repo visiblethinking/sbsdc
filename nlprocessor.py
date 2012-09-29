@@ -1,3 +1,7 @@
+string = "what's the forecast at 5545"
+logfile = "/var/www/smartbusstop.com/logs/sbsdc.log"
+module_keys = {'foursquare': 'places, food, drink, art', 'neighborhood': 'weather, forecast', 'localstories': 'overheard, local stories', 'localevents': 'events', 'weather': 'weather, forecast', 'lolcat': 'lolcat', 'walkingdirections': 'walking, walk, onfoot, walkingdir', 'publicart': 'art', 'example': 'example, test'}
+
 import nltk
 from nltk.corpus import wordnet
 tokenizer = None
@@ -54,3 +58,5 @@ def nl_process(string, logfile, module_keys):
         break
     
     return(location,module,text)
+
+print nl_process(string, logfile, module_keys)

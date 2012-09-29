@@ -12,7 +12,11 @@
 # version: 1.0.0
 # notes: fetches and sends latest weather forecast
 #
+<<<<<<< HEAD
 # keywords: neighborhoods, town
+=======
+# keywords: neighborhood
+>>>>>>> Natural language sorta works
 #
 # # # # # # # # # # # # # # # # # # # # # #
 import sys, urllib, simplejson, datetime

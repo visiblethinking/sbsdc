@@ -39,7 +39,7 @@ def accept_conn(data):
 		print "hi"
 		if NL == 1:
 		    print "yo"
-		    nl_data = nl_process(data,logfile,module_keys)
+		    nl_data = nl_process(" ".join(message.split("+")),logfile,module_keys)
 		    run_module(nl_data[1], geo, nl_data[2], sender, logfile)    
 		else:
 		    run_module(module, geo , message, sender, logfile)
