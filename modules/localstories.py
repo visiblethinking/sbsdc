@@ -19,19 +19,20 @@ import sys, random
 phoneNum = sys.argv[1]
 lat = sys.argv[2]
 lon = sys.argv[3]
-try:
-	message = sys.argv[4]
+message = sys.argv[4]
 
-	# Write a message
-	w = open('localstories.txt','a')
-	w.write(message)
-	w.write('||')
-	w.close()
-	print 'Got it. We\'ll tell others your story when they ask.'
+if message != "":
+    message = sys.argv[4]
+    # Write a message
+    w = open('localstories.txt','a')
+    w.write(message)
+    w.write('||')
+    w.close()
+    print 'Got it. We\'ll tell others your story when they ask.'
 
-except IndexError:
-	r = open('localstories.txt','r')
-	r_raw = r.read()
-	stories = r_raw.split('||')
-	i = random.randint(0,len(stories)-2)
-	print stories[i]
+else:
+    r = open('localstories.txt','r')
+    r_raw = r.read()
+    stories = r_raw.split('||')
+    i = random.randint(0,len(stories)-2)
+    print stories[i]

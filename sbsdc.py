@@ -79,7 +79,7 @@ if __name__ == "__main__":
 	try:
 	    soc = None
 	    open(logfile, "a").write("%s: Starting server at %s:%s\n" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), hostname, port))
-	    soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+	    soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	    port = int(float(port))
 	    soc.bind((hostname,port))
 	    soc.listen(backlog)

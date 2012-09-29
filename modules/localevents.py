@@ -33,5 +33,3 @@ newsitems = newsitems_node[0].childNodes
 for newsitem in newsitems:
 	print newsitem.nodeType
 
-# newsitems = events[0].getElementsByTagName('newsitem')[0]
-# print newsitems.getAttribute('title')

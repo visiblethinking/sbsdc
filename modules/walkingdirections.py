@@ -2,8 +2,8 @@
 # # # # # # # # # # # # # # # # # # # # # # 
 #
 # project: Smart Bus Stops Done Dirt Cheap
-# title: Walking Directions
-# file: walkingDirections.py
+# title: walkingdirections
+# file: walkingdirections.py
 # description: returns walking directions to a location.
 # language: python
 # 
