@@ -1,7 +1,3 @@
-module_keys = {"yelp": "pastry, food, weather", "weather" : "temperature, rain, colt hot"}
-logfile = "/var/www/smartbusstop.com/logs/sbsdc.log"
-string = "What's the temperature near 5545?"
-
 import nltk
 from nltk.corpus import wordnet
 tokenizer = None
@@ -31,11 +27,13 @@ def nl_process(string, logfile, module_keys):
     string = tag(string)
     location = ""
     search_term = ""
+    text = ""
     for word in string:
         if word[1] is None:
             location = word[0]
         elif word[1] == "NN":
             search_term = word[0]
+            text += word[0]
         else:
             continue
     
@@ -55,7 +53,4 @@ def nl_process(string, logfile, module_keys):
             continue
         break
     
-    return(location,module)
-
-if __name__ == '__main__':
-    print nl_process(string,logfile,module_keys)
+    return(location,module,text)
