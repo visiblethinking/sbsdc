@@ -36,7 +36,6 @@ def accept_conn(data):
 	    pids = (os.getpid(), newpid)
 	    open(logfile, "a").write("%s: Running module %s\n" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), module))
 	    try:
-		print "hi"
 		if NL == 1:
 		    print "yo"
 		    nl_data = nl_process(" ".join(message.split("+")),logfile,module_keys)
