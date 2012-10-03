@@ -4,6 +4,7 @@ sbsdc.komodoproject
 
 #automatially created lof files
 sbsdc.log
+example.log
 
 #OS specific files
 .DS_Store
