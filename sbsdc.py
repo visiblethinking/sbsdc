@@ -39,7 +39,9 @@ def accept_conn(data):
 		if NL == 1:
 		    print "yo"
 		    nl_data = nl_process(" ".join(message.split("+")),logfile,module_keys)
+		    print "hi"
 		    run_module(nl_data[1], geo, nl_data[2], sender, logfile)    
+		    print "shit"
 		else:
 		    run_module(module, geo , message, sender, logfile)
 	    except:
@@ -85,10 +87,9 @@ if __name__ == "__main__":
     open(logfile, "w").write("\n-----------------------------------------------------\n%s: Startup, checking core and scanning modules.\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     from modules import *
     from geocode import *
-    print NL
     if NL == 1:
 	import nlprocessor
-	print "Starting natural language processor.\n"
+	print "Starting natural language processor."
     backlog = 5 
     size = 1024 
     while 1:
