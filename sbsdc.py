@@ -33,13 +33,11 @@ def accept_conn(data):
 	else:
 	    pids = (os.getpid(), newpid)
 	    try:
-		print NL
 		if NL == 1:
 		    message = " ".join(message.split("+"))
 		    nl_data = nl_process(message,logfile,module_keys)
 		    geo = get_location(nl_data[0])
-		    run_module(nl_data[1], geo, nl_data[2], sender, logfile)    
-		    print "shit"
+		    run_module(nl_data[1], geo, nl_data[2], sender, logfile)
 		else:
 		    message = " ".join(message.split("+")[2:])
 		    module = message.split("+")[1]
