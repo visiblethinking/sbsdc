@@ -49,8 +49,10 @@ def accept_conn(data):
 		except:
 		    open(logfile, "a").write("%s: Failed in run_module in basic mode.\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
-    except:
+    except Exception, e:
+	open(logfile, "a").write("e"))
 	open(logfile, "a").write("%s: Failed in accept_conn\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+	
 
 if __name__ == "__main__":
     import sys
