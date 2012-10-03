@@ -24,9 +24,8 @@ def accept_conn(data):
 		message = x[5:]
 	    if "from=" in x.lower():
 		sender = x[8:]
-	module = message.split("+")[1]
-	geo = get_location(message.split("+")[0])
-	message = " ".join(message.split("+")[2:])
+	
+	
 	#open(logfile, "a").write("%s: %s | %s | %s\n" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), sender, module, message))
 	newpid = os.fork()
 	if newpid == 0:
@@ -37,13 +36,17 @@ def accept_conn(data):
 	    open(logfile, "a").write("%s: Running module %s\n" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), module))
 	    try:
 		if NL == 1:
-		    print logfile
-		    print module_keys
+		    message = " ".join(message.split("+"))
+		    print message
 		    nl_data = nl_process(" ".join(message.split("+")),logfile,module_keys)
 		    print "hi"
+		    geo = get_location(nl_data[0])
 		    run_module(nl_data[1], geo, nl_data[2], sender, logfile)    
 		    print "shit"
 		else:
+		    message = " ".join(message.split("+")[2:])
+		    module = message.split("+")[1]
+		    geo = get_location(message.split("+")[0])
 		    run_module(module, geo , message, sender, logfile)
 	    except:
 		open(logfile, "a").write("%s: Failed in run_module in NLTK mode.\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
