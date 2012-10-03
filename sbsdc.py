@@ -86,6 +86,7 @@ if __name__ == "__main__":
     from geocode import *
     if NL == 1:
 	import nlprosser
+	print "Starting natural language processor."
     backlog = 5 
     size = 1024 
     while 1:
