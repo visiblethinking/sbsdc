@@ -35,11 +35,8 @@ def accept_conn(data):
 	    try:
 		print NL
 		if NL == 1:
-		    print "hi"
 		    message = " ".join(message.split("+"))
-		    print message
 		    nl_data = nl_process(message,logfile,module_keys)
-		    print "hi"
 		    geo = get_location(nl_data[0])
 		    run_module(nl_data[1], geo, nl_data[2], sender, logfile)    
 		    print "shit"
@@ -92,7 +89,7 @@ if __name__ == "__main__":
     from modules import *
     from geocode import *
     if NL == 1:
-	import nlprocessor
+	from nlprocessor import *
 	print "Starting natural language processor."
     backlog = 5 
     size = 1024 
