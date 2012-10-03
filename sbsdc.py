@@ -16,10 +16,9 @@
     
 def accept_conn(data):
     try:
-	references = data.split('&')
 	message = ""
 	sender = ""
-	for x in references:
+	for x in data.split('&'):
 	    if "body=" in x.lower():
 		message = x[5:]
 	    if "from=" in x.lower():
@@ -32,6 +31,7 @@ def accept_conn(data):
 	    open(logfile, "a").write("%s" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "ERROR!!! Module run failed on PID\n")
 	    os.exit()
 	else:
+	    print "hi"
 	    pids = (os.getpid(), newpid)
 	    open(logfile, "a").write("%s: Running module %s\n" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), module))
 	    try:
