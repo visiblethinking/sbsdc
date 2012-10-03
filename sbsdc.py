@@ -43,7 +43,7 @@ def accept_conn(data):
 		else:
 		    run_module(module, geo , message, sender, logfile)
 	    except:
-		open(logfile, "a").write("%s: Failed in run_module.\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+		open(logfile, "a").write("%s: Failed in run_module in NLTK mode.\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     except:
 	open(logfile, "a").write("%s: Failed in accept_conn\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
