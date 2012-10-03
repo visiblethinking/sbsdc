@@ -85,6 +85,8 @@ if __name__ == "__main__":
     open(logfile, "w").write("\n-----------------------------------------------------\n%s: Startup, checking core and scanning modules.\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     from modules import *
     from geocode import *
+    if NL == 1:
+	import nlprosser
     backlog = 5 
     size = 1024 
     while 1:
