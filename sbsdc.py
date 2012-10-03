@@ -39,7 +39,7 @@ def accept_conn(data):
 		    geo = get_location(nl_data[0])
 		    run_module(nl_data[1], geo, nl_data[2], sender, logfile)
 		except:
-		    open(logfile, "a").write("%s: Failed in run_module in NLTK mode.\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+		    open(logfile, "a").write("%s: Failed in run_module in NLTK mode.\nmessage: %s\n module: %s\ngeo: %s\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), message, nl_data[1], nl_data[0])
 	    else:
 		try:
 		    message = " ".join(message.split("+")[2:])
