@@ -37,7 +37,8 @@ def accept_conn(data):
 	    open(logfile, "a").write("%s: Running module %s\n" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), module))
 	    try:
 		if NL == 1:
-		    print "yo"
+		    print logfile
+		    print module_keys
 		    nl_data = nl_process(" ".join(message.split("+")),logfile,module_keys)
 		    print "hi"
 		    run_module(nl_data[1], geo, nl_data[2], sender, logfile)    
