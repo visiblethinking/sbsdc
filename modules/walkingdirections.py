@@ -12,7 +12,7 @@
 # version: 1.0.0
 # notes: .
 #
-# keywords: walking, walk, onfoot, walkingdir
+# keywords: walking, walk, foot, onfoot, walkingdir
 #
 # # # # # # # # # # # # # # # # # # # # # #
 
