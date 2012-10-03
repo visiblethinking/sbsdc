@@ -16,7 +16,7 @@ def tag(text):
         init_nltk()
     tokenized = tokenizer.tokenize(text)
     tagged = tagger.tag(tokenized)
-    tagged.sort(lambda x,y:cmp(x[1],y[1]))
+    #tagged.sort(lambda x,y:cmp(x[1],y[1]))
     return tagged
 
 
@@ -42,6 +42,7 @@ def nl_process(string, logfile, module_keys):
     
     for path in paths:
         for line in simple_path(path):
+            print line
             for key, value in module_keys.items():
                 if line in value.split(", "):
                     module = key
