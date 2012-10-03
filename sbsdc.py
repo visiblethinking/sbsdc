@@ -31,11 +31,11 @@ def accept_conn(data):
 	    open(logfile, "a").write("%s" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "ERROR!!! Module run failed on PID\n")
 	    os.exit()
 	else:
-	    print "hi"
 	    pids = (os.getpid(), newpid)
 	    open(logfile, "a").write("%s: Running module %s\n" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), module))
 	    try:
 		if NL == 1:
+		    print "hi"
 		    message = " ".join(message.split("+"))
 		    print message
 		    nl_data = nl_process(" ".join(message.split("+")),logfile,module_keys)
