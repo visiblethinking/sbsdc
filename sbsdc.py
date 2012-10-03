@@ -32,19 +32,22 @@ def accept_conn(data):
 	    os.exit()
 	else:
 	    pids = (os.getpid(), newpid)
-	    try:
-		if NL == 1:
+	    if NL == 1:
+		try:
 		    message = " ".join(message.split("+"))
 		    nl_data = nl_process(message,logfile,module_keys)
 		    geo = get_location(nl_data[0])
 		    run_module(nl_data[1], geo, nl_data[2], sender, logfile)
-		else:
+		except:
+		    open(logfile, "a").write("%s: Failed in run_module in NLTK mode.\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+	    else:
+		try:
 		    message = " ".join(message.split("+")[2:])
 		    module = message.split("+")[1]
 		    geo = get_location(message.split("+")[0])
 		    run_module(module, geo , message, sender, logfile)
-	    except:
-		open(logfile, "a").write("%s: Failed in run_module in NLTK mode.\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+		except:
+		    open(logfile, "a").write("%s: Failed in run_module in basic mode.\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     except:
 	open(logfile, "a").write("%s: Failed in accept_conn\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
