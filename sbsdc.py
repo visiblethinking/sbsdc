@@ -31,8 +31,11 @@ def accept_conn(data):
 	    open(logfile, "a").write("%s" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "ERROR!!! Module run failed on PID\n")
 	    os.exit()
 	else:
+	    print "0"
 	    pids = (os.getpid(), newpid)
+	    print "1"
 	    open(logfile, "a").write("%s: Running module %s\n" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), module))
+	    print "2"
 	    try:
 		print NL
 		if NL == 1:
