@@ -12,7 +12,7 @@
 # version: 1.0.0
 # notes: fetches and sends latest weather forecast
 #
-# keywords: weather, forecast
+# keywords: neighborhoods, town
 #
 # # # # # # # # # # # # # # # # # # # # # #
 import sys, urllib, simplejson, datetime
