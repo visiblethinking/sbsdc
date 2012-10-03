@@ -39,7 +39,7 @@ def nl_process(string, logfile, module_keys):
     
     word = wordnet.synset('%s.n.01' % search_term)
     paths = word.hypernym_paths()
-    print text
+    print text + "\n"
     for path in paths:
         for line in simple_path(path):
             for key, value in module_keys.items():
