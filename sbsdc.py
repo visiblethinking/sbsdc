@@ -50,7 +50,9 @@ def accept_conn(data):
 		    open(logfile, "a").write("%s: Failed in run_module in basic mode.\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     except Exception as e:
-	open(logfile, "a").write(e)
+	open(logfile, "a").write("%s" + str(e) % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    except:
+	logging.warning("failed in accept_conn")
 	open(logfile, "a").write("%s: Failed in accept_conn\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 	
 
@@ -61,6 +63,7 @@ if __name__ == "__main__":
     import time
     import socket
     import threading
+    import logging
     
     # Read config file and sset global standards
     global hostname
@@ -68,6 +71,12 @@ if __name__ == "__main__":
     global logfile
     global NL
     NL=0
+    
+    try:
+	logging.basicConfig(filename='example.log', level=logging.INFO)
+    except IOError, e:
+	print e
+	print 'Unable to print to log'
     
     try:
 	config = open('config','r').readlines()
