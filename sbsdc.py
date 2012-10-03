@@ -77,7 +77,7 @@ if __name__ == "__main__":
 	elif x[0].lower() == "logfile":
 	    logfile = x[1].rstrip()
 	elif x[0].lower() == "natural language":
-	    print x[0].lower()
+	    x[1] = x[1].rstrip()
 	    if x[1].lower() == "on":
 		NL = 1
     
