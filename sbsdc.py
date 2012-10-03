@@ -24,11 +24,14 @@ def accept_conn(data):
 	    if "from=" in x.lower():
 		sender = x[8:]
 	
-	
+	print "Sender: %s" % sender
+	print "Module: %s" % module
+	print "Message: %s" % message
 	#open(logfile, "a").write("%s: %s | %s | %s\n" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), sender, module, message))
 	newpid = os.fork()
 	if newpid == 0:
-	    open(logfile, "a").write("%s" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "ERROR!!! Module run failed on PID\n")
+	    print("Module run failed on fork: PID")
+	    logging.error("Module run failed on fork: PID")
 	    os.exit()
 	else:
 	    pids = (os.getpid(), newpid)
@@ -38,33 +41,41 @@ def accept_conn(data):
 		    nl_data = nl_process(message,logfile,module_keys)
 		    geo = get_location(nl_data[0])
 		    run_module(nl_data[1], geo, nl_data[2], sender, logfile)
-		except:
-		    open(logfile, "a").write("%s: Failed in run_module in NLTK mode.\nmessage: %s\n module: %s\ngeo: %s\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), message, nl_data[1], nl_data[0])
+		except Exception as e:
+		    logging.error(e)
+		    logging.error("Failed in run_module in NLTK mode.\nmessage: %s\n module: %s\ngeo: %s\n" % message, nl_data[1], nl_data[0])
 	    else:
 		try:
 		    message = " ".join(message.split("+")[2:])
 		    module = message.split("+")[1]
 		    geo = get_location(message.split("+")[0])
 		    run_module(module, geo , message, sender, logfile)
-		except:
-		    open(logfile, "a").write("%s: Failed in run_module in basic mode.\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+		except Exception as e:
+		    logging.error(e)
+		    logging.error("Failed in run_module in basic mode.")
+		    #open(logfile, "a").write("%s: Failed in run_module in basic mode.\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     
-    except:
-	logging.warning("failed in accept_conn")
-	open(logfile, "a").write("%s: Failed in accept_conn\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-#    except Exception as e:
-#	open(logfile, "a").write("%s" + str(e) % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+#    except:
+#	open(logfile, "a").write("%s: Failed in accept_conn\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    except Exception as e:
+	logging.error("failed in accept_conn")
 	
 
 if __name__ == "__main__":
-    import sys
-    import datetime
-    import os
-    import time
-    import socket
-    import threading
-    import logging
+    try:
+	import sys
+	import datetime
+	import os
+	import time
+	import socket
+	import threading
+	import logging
+	import inspect
+	from modules import *
+	from geocode import *
+    except ImportError as e:
+	logging.warning(e)
     
     # Read config file and sset global standards
     global hostname
@@ -73,17 +84,14 @@ if __name__ == "__main__":
     global NL
     NL=0
     
-    try:
-	logging.basicConfig(filename='example.log', level=logging.INFO)
-    except IOError, e:
-	print e
-	print 'Unable to print to log'
+    
     
     try:
 	config = open('config','r').readlines()
-    except:
-	open(config, "a").write("%s: Unable to open configuration file.\n" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), sender, module, message))
-	os.exit()
+    except IOError as e:
+	os.exit(e)
+	
+    #Parse config file
     for line in config:
 	x = line.split("=")
 	if x[0].lower() == "hostname":
@@ -96,25 +104,49 @@ if __name__ == "__main__":
 	    x[1] = x[1].rstrip()
 	    if x[1].lower() == "on":
 		NL = 1
+
+    #Logging formatting
+    try:
+        logging.basicConfig(filename=logfile,
+            format='%(asctime)s %(levelname)s %(message)s',
+            datefmt='%a, %d %b %Y %H:%M:%S',
+            level=logging.INFO)
+    except IOError, e:
+        print e
+        print 'Unable to print to log'
     
     # open port and recieve incomming connections   
-    open(logfile, "w").write("\n-----------------------------------------------------\n%s: Startup, checking core and scanning modules.\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    from modules import *
-    from geocode import *
+    logging.info("\n-----------------------------------------------------\n: Startup, checking core and scanning modules.")
+    
+    
+    
+    #If NL = 1 in config file, turn on NL processor.  
     if NL == 1:
-	from nlprocessor import *
-	print "Starting natural language processor."
+	try:
+	    from nlprocessor import *
+	    #******* Fix logging std_out and this shouldn't need to be printed.********
+	    print "Starting natural language processor."
+	    logging.info("Starting natural language processor.")
+	except ImportError as e:
+	    print e
+	    logging.warning(e)
+    elif NL != 1:
+	logging.info("Disabling NL processor")
+	print("Disabling NL processor")
     backlog = 5 
     size = 1024 
+
     while 1:
 	try:
 	    soc = None
-	    open(logfile, "a").write("%s: Starting server at %s:%s\n" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), hostname, port))
+	    print("Starting server at %s:%s" % (hostname, port))
+	    logging.info("Starting server at %s:%s" % (hostname, port))
 	    soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	    port = int(float(port))
 	    soc.bind((hostname,port))
 	    soc.listen(backlog)
 	    print "Server is now running on %s:%s" % (hostname, port)
+	    logging.info("Server is now running on %s:%s" % (hostname, port))
 	    try:
 		while 1:
 		    client, address = soc.accept() 
@@ -122,9 +154,11 @@ if __name__ == "__main__":
 		    if data:
 			accept_conn(data) 
 		    client.close()
-	    except:
-		open(logfile, "a").write("%s: ERROR!!! Server failed to run module: %s\n" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), client.recv(size)))
-	except:
-	    print "%s: WARNING!!! Server failed to start.%s" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), soc)
+	    except Exception as e:
+		#open(logfile, "a").write("%s: ERROR!!! Server failed to run module: %s\n" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), client.recv(size)))
+		logging.error(str(e) + ": Server failed to run module")
+	except Exception as e:
+	    logging.warning(str(e) + ': Server failed to start.%s' % soc)
+	    #print "%s: WARNING!!! Server failed to start.%s" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), soc)
 	    soc = None
 	time.sleep(1)
