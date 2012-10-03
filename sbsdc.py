@@ -38,7 +38,7 @@ def accept_conn(data):
 		    print "hi"
 		    message = " ".join(message.split("+"))
 		    print message
-		    nl_data = nl_process(" ".join(message.split("+")),logfile,module_keys)
+		    nl_data = nl_process(message,logfile,module_keys)
 		    print "hi"
 		    geo = get_location(nl_data[0])
 		    run_module(nl_data[1], geo, nl_data[2], sender, logfile)    
