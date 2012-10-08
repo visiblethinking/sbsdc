@@ -12,7 +12,7 @@
 # notes: for now does not do geolocation, just uses San Francisco
 #
 # # # # # # # # # # # # # # # # # # # # # # 
-
+import traceback
     
 def accept_conn(data):
     try:
@@ -26,8 +26,7 @@ def accept_conn(data):
 	
 	newpid = os.fork()
 	if newpid == 0:
-	    print("Module run failed on fork: PID")
-	    logging.error("Module run failed on fork: PID")
+	    logging.warning("Module run failed on fork: PID")
 	    os.exit()
 	else:
 	    pids = (os.getpid(), newpid)
@@ -48,6 +47,7 @@ def accept_conn(data):
 		except Exception as e:
 		    logging.error("Failed in run_module in basic mode: %s" % e)
     except Exception as e:
+	traceback.print_exc()
 	logging.error("failed in accept_conn: %s" % e)
 	
 if __name__ == "__main__":
