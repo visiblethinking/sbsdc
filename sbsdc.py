@@ -97,7 +97,7 @@ if __name__ == "__main__":
 			    format='%(asctime)s %(levelname)s %(message)s',
 			    datefmt='%a, %d %b %Y %H:%M:%S',
 			    level=logging.DEBUG)
-	logging.error("\n-----------------------------------------------------\n: Startup, checking core and scanning modules.")
+	logging.info("\n-----------------------------------------------------\n: Startup, checking core and scanning modules.")
     except IOError, e:
         print "Unable to print to log: %s" % e
 	sys.exit()
@@ -108,7 +108,7 @@ if __name__ == "__main__":
 	    from nlprocessor import *
 	    #******* Fix logging std_out and this shouldn't need to be printed.********
 	    print "Starting natural language processor."
-	    logging.info("Starting natural language processor.")
+	    logging.info('Starting natural language processor.')
 	except ImportError as e:
 	    print e
 	    logging.warning(e)
