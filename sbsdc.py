@@ -24,9 +24,6 @@ def accept_conn(data):
 	    if "from=" in x.lower():
 		sender = x[8:]
 	
-	print "Sender: %s" % sender
-	print "Module: %s" % module
-	print "Message: %s" % message
 	newpid = os.fork()
 	if newpid == 0:
 	    print("Module run failed on fork: PID")
