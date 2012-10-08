@@ -12,7 +12,6 @@
 # notes: for now does not do geolocation, just uses San Francisco
 #
 # # # # # # # # # # # # # # # # # # # # # # 
-import traceback
     
 def accept_conn(data):
     try:
@@ -47,7 +46,6 @@ def accept_conn(data):
 		except Exception as e:
 		    logging.error("Failed in run_module in basic mode: %s" % e)
     except Exception as e:
-	traceback.print_exc()
 	logging.error("failed in accept_conn: %s" % e)
 	
 if __name__ == "__main__":
@@ -59,7 +57,6 @@ if __name__ == "__main__":
 	import socket
 	import threading
 	import logging
-	import inspect
 	from modules import *
 	from geocode import *
     except ImportError as e:
