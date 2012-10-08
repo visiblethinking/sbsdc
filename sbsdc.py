@@ -57,6 +57,7 @@ if __name__ == "__main__":
 	import socket
 	import threading
 	import logging
+	import inspect
 	from modules import *
 	from geocode import *
     except ImportError as e:
@@ -73,8 +74,8 @@ if __name__ == "__main__":
     try:
 	config = open('config','r').readlines()
     except IOError as e:
-	print "Unable to find Configuration file!"
-	sys.exit(e)
+	print "Unable to find Configuration file! %s" % e
+	sys.exit()
 	
     #Parse config file
     for line in config:
