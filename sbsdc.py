@@ -27,7 +27,7 @@ def accept_conn(data):
 	newpid = os.fork()
 	if newpid == 0:
 	    logging.warning("Module run failed on fork: PID")
-	    os.exit()
+	    sys.exit()
 	else:
 	    pids = (os.getpid(), newpid)
 	    if NL == 1:
@@ -75,7 +75,7 @@ if __name__ == "__main__":
     try:
 	config = open('config','r').readlines()
     except IOError as e:
-	os.exit(e)
+	sys.exit(e)
 	
     #Parse config file
     for line in config:
