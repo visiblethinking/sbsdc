@@ -22,6 +22,7 @@ import datetime
 import httplib
 import base64
 import urllib
+import logging
    
 module_name = []
 module_lang = {}
@@ -50,12 +51,12 @@ for module in os.listdir("%s/modules" % os.getcwd()):
          y = line.split("keywords: ")[1][:-1]
          module_keys[x] = y.lower()
          # Write new module to logfile and check and repair permissions
-   open("../logs/sbsdc.log", "a").write("%s: Opening file modules/%s. written in %s with keywords: %s.\n" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), module, module_lang[x], module_keys[x]))
+   logging.info("Opening file modules/%s. written in %s with keywords: %s.\n" % (module, module_lang[x], module_keys[x]))
    if oct(os.stat("modules/%s" % module)[0]) != oct(33277):
-      open("../logs/sbsdc.log", "a").write("%s: Warning!! Module %s has file permissions %s, fixing. . . \n" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), module, oct(os.stat("modules/%s" % module)[0])))
+      logging.warning("Warning!! Module %s has file permissions %s, fixing. . . \n" % (module, oct(os.stat("modules/%s" % module)[0])))
       os.system("chmod 775 modules/%s" % module)
 
-open("../logs/sbsdc.log", "a").write("%s: Done loading modules. \n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+logging.info("Done loading modules.\n")
 
 # sub that forks off a call to external module
 def run_module(name, location, message, tosms, logfile):
@@ -64,12 +65,12 @@ def run_module(name, location, message, tosms, logfile):
       lang = langs[module_lang[name.lower()]].split("|")[1]
       myoutput = None
       PIPE = subprocess.PIPE
-      open(logfile, "a").write("%s: %s%s %s %s %s %s\n" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), name.lower(), lang, tosms, location[0], location[1], message))
+      logging.info("%s%s %s %s %s %s\n" % (name.lower(), lang, tosms, location[0], location[1], message))
       process = subprocess.Popen(["%s" % prog, "%s/modules/%s%s" % (os.getcwd(), name, lang), tosms, location[0], location[1], message], stdin=PIPE, stdout=PIPE, shell=False)
       myoutput = process.stdout.read()
-      open(logfile, "a").write("%s: Running %s looking for %s.\n" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), name.lower(), message))
+      logging.info("Running %s looking for %s.\n" % (name.lower(), message))
    except:
-      open(logfile, "a").write("%s: ERROR!!! Failed to run: %s%s" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), name.lower(), lang), tosms, location[0], location[1], message)
+      logging.error("Failed to run: %s%s" % (name.lower(), lang), tosms, location[0], location[1], message)
       myoutput = "Sorry there was an error in your message."
    
    try:
@@ -80,7 +81,7 @@ def run_module(name, location, message, tosms, logfile):
       auth = base64.encodestring("%s:%s" % (username, password)).replace('\n', '')
       headers = {"Authorization" : "Basic %s" % auth, 'Content-Type': 'application/x-www-form-urlencoded'}
    except:
-      open(logfile, "a").write("%s: Unable to load txt header.\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+      logging.error("Unable to load txt header.\n")
    
    try:
       conn = httplib.HTTPSConnection("api.twilio.com")
@@ -89,7 +90,7 @@ def run_module(name, location, message, tosms, logfile):
       data = response.read()
       conn.close()
    except:
-      open(logfile, "a").write("%s: Unable to load send text.\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+      logging.error("Unable to send text.\n")
    
       
       
@@ -97,7 +98,7 @@ langs = {}
 try:
    langfile = open('languages','r')
 except:
-   open(logfile, "a").write("%s: Unable to open languages file.\n" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), sender, module, message))
+   logging.info("Unable to open languages file.\n")
    sys.exit()
 for line in langfile:
    if not line[0] == "#":
