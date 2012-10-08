@@ -57,9 +57,7 @@ if __name__ == "__main__":
 	import socket
 	import threading
 	import logging
-	import inspect
-	from modules import *
-	from geocode import *
+
     except ImportError as e:
 	print "Unable to import all modules: %s" % e
 	sys.exit()
@@ -101,6 +99,9 @@ if __name__ == "__main__":
     except IOError, e:
         print "Unable to print to log: %s" % e
 	sys.exit()
+
+    from modules import *
+    from geocode import *
     
    #If NL = 1 in config file, turn on NL processor.  
     if NL == 1:
