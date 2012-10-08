@@ -141,7 +141,7 @@ if __name__ == "__main__":
 		    client.close()
 	    except Exception as e:
 		logging.error(str(e) + ": Server failed.")
-		os.exit(e)
+		sys.exit(e)
 	except Exception as e:
 	    logging.warning(str(e) + ': Server failed to start. %s' % soc)
 	    soc = None

@@ -98,7 +98,7 @@ try:
    langfile = open('languages','r')
 except:
    open(logfile, "a").write("%s: Unable to open languages file.\n" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), sender, module, message))
-   os.exit()
+   sys.exit()
 for line in langfile:
    if not line[0] == "#":
       x=line.split("|")
