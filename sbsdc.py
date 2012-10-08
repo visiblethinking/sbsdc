@@ -90,13 +90,10 @@ if __name__ == "__main__":
 
     #Logging formatting
     try:
-	print "1"
         logging.basicConfig(filename=logfile, format='%(asctime)s %(levelname)s %(message)s', datefmt='%a, %d %b %Y %H:%M:%S', level=logging.INFO)
+	logging.info("\n-----------------------------------------------------\n: Startup, checking core and scanning modules.")
     except IOError, e:
         print "Unable to print to log: %s" % e
-    
-    # open port and recieve incomming connections   
-    logging.info("\n-----------------------------------------------------\n: Startup, checking core and scanning modules.")
     
    #If NL = 1 in config file, turn on NL processor.  
     if NL == 1:
