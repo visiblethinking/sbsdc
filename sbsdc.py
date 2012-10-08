@@ -60,7 +60,8 @@ if __name__ == "__main__":
 	from modules import *
 	from geocode import *
     except ImportError as e:
-	logging.warning(e)
+	print "Unable to import all modules: %s" % e
+	sys.exit()
 
     # Read config file and sset global standards
     global hostname
@@ -72,6 +73,7 @@ if __name__ == "__main__":
     try:
 	config = open('config','r').readlines()
     except IOError as e:
+	print "Unable to find Configuration file!"
 	sys.exit(e)
 	
     #Parse config file
