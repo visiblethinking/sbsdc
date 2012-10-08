@@ -94,6 +94,7 @@ if __name__ == "__main__":
 	logging.info("\n-----------------------------------------------------\n: Startup, checking core and scanning modules.")
     except IOError, e:
         print "Unable to print to log: %s" % e
+	sys.exit()
     
    #If NL = 1 in config file, turn on NL processor.  
     if NL == 1:
