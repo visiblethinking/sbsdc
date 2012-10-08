@@ -96,6 +96,7 @@ if __name__ == "__main__":
 	print logfile
         logging.basicConfig(filename=logfile, format='%(asctime)s %(levelname)s %(message)s', datefmt='%a, %d %b %Y %H:%M:%S', level=logging.DEBUG)
 	logging.info("\n-----------------------------------------------------\n: Startup, checking core and scanning modules.")
+	print "1"
     except IOError, e:
         print "Unable to print to log: %s" % e
 	sys.exit()
