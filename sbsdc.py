@@ -22,7 +22,6 @@ def accept_conn(data):
 		message = x[5:]
 	    if "from=" in x.lower():
 		sender = x[8:]
-	logging.debug('ACCEPT_CONN:', message, sender)
 	
 	newpid = os.fork()
 	if newpid == 0:
@@ -37,7 +36,6 @@ def accept_conn(data):
 		    geo = get_location(nl_data[0])
 		    run_module(nl_data[1], geo, nl_data[2], sender, logfile)
 		except Exception as e:
-		    logging.debug("Failed in runModule %s" % e)
 		    logging.error("Failed in run_module in NLTK mode.\nmessage: %s\n module: %s\ngeo: %s\n%s" % message, nl_data[1], nl_data[0], e)
 	    else:
 		try:
@@ -138,7 +136,6 @@ if __name__ == "__main__":
 		    client, address = soc.accept() 
 		    data = client.recv(size) 
 		    if data:
-			logging.debug('ACCEPT_CONN: About to run')
 			accept_conn(data) 
 		    client.close()
 	    except Exception as e:
