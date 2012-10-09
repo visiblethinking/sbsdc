@@ -15,48 +15,67 @@
 
 # search modules/ directory and determine name, language and keywords to available mods
 
-import os
-import sys
-import subprocess
-import datetime
-import httplib
-import base64
-import urllib
-import logging
+try:
+   import os
+   import sys
+   import subprocess
+   import datetime
+   import httplib
+   import base64
+   import urllib
+   import logging
+   import glob
+except ImportError as e:
+   sys.exit(e)
    
+#Logging formatting
+   try:
+      logging.basicConfig(filename=logfile,
+         format='%(asctime)s %(levelname)s %(message)s',
+         datefmt='%a, %d %b %Y %H:%M:%S',
+         level=logging.DEBUG)
+
+   except IOError, e:
+      sys.exit("Unable to print to log: %s" % e)
+
 module_name = []
 module_lang = {}
 global module_keys
 module_keys = {}
 
-# Read modules/ directory and determine their name, language and keywords
-for module in os.listdir("%s/modules" % os.getcwd()):
-   x = ''
-   # open directory modules/
-   f = open("modules/%s" % module, 'r')
-   # Search each file found line by line for keywords
-   for line in f.readlines():
-      # If Title is found, save to memory cache and create a list for that module
-      if "title" in line:
-         y = line.split("title: ")[1][:-1]
-         module_name.append(y.lower())
-         x = line.split("title: ")[1][:-1].lower()
-      # If Language found, save to memory cache
-      if "# language:" in line:
-         y = line.split("language: ")[1][:-1]
-         module_lang[x] = y.lower()
-         lang = ''
-      # If Keywords found, save to memory cache 
-      if "# keywords:" in line:
-         y = line.split("keywords: ")[1][:-1]
-         module_keys[x] = y.lower()
-         # Write new module to logfile and check and repair permissions
-   logging.info("Opening file modules/%s. written in %s with keywords: %s.\n" % (module, module_lang[x], module_keys[x]))
-   if oct(os.stat("modules/%s" % module)[0]) != oct(33277):
-      logging.warning("Warning!! Module %s has file permissions %s, fixing. . . \n" % (module, oct(os.stat("modules/%s" % module)[0])))
-      os.system("chmod 775 modules/%s" % module)
+# TODO: Check to make sure modules directory isn't empty.
+#
 
-logging.info("Done loading modules.\n")
+# Read modules/ directory and determine their name, language and keywords
+for module in glob.glob("%s/modules/*" % os.getcwd()):
+   if os.path.isfile(module): 
+      x = ''
+      # open module
+      f = open(module, 'r')
+      # Search each file found line by line for keywords
+      for line in f.readlines():
+         # If Title is found, save to memory cache and create a list for that module
+         if "title" in line:
+            y = line.split("title: ")[1][:-1]
+            module_name.append(y.lower())
+            x = line.split("title: ")[1][:-1].lower()
+         # If Language found, save to memory cache
+         if "# language:" in line:
+            y = line.split("language: ")[1][:-1]
+            module_lang[x] = y.lower()
+            lang = ''
+         # If Keywords found, save to memory cache 
+         if "# keywords:" in line:
+            y = line.split("keywords: ")[1][:-1]
+            module_keys[x] = y.lower()
+            # Write new module to logfile and check and repair permissions
+      logging.info("Opening file %s. written in %s with keywords: %s." % (module, module_lang[x], module_keys[x]))
+      
+      # Should we really keep this line?  IMO this is kinda sloppy.  Maybe just check read permissions as it parses and fail module if it fails.
+      if oct(os.stat(module)[0]) != oct(33277):
+         logging.warning("Warning!! Module %s has file permissions %s, fixing. . ." % (module, oct(os.stat(module)[0])))
+         os.system("chmod 775 %s" % module)
+logging.info("Done loading modules.")
 
 # sub that forks off a call to external module
 def run_module(name, location, message, tosms, logfile):
@@ -65,10 +84,10 @@ def run_module(name, location, message, tosms, logfile):
       lang = langs[module_lang[name.lower()]].split("|")[1]
       myoutput = None
       PIPE = subprocess.PIPE
-      logging.info("%s%s %s %s %s %s\n" % (name.lower(), lang, tosms, location[0], location[1], message))
+      logging.info("%s%s %s %s %s %s" % (name.lower(), lang, tosms, location[0], location[1], message))
       process = subprocess.Popen(["%s" % prog, "%s/modules/%s%s" % (os.getcwd(), name, lang), tosms, location[0], location[1], message], stdin=PIPE, stdout=PIPE, shell=False)
       myoutput = process.stdout.read()
-      logging.info("Running %s looking for %s.\n" % (name.lower(), message))
+      logging.info("Running %s looking for %s." % (name.lower(), message))
    except:
       logging.error("Failed to run: %s%s" % (name.lower(), lang), tosms, location[0], location[1], message)
       myoutput = "Sorry there was an error in your message."
@@ -81,7 +100,7 @@ def run_module(name, location, message, tosms, logfile):
       auth = base64.encodestring("%s:%s" % (username, password)).replace('\n', '')
       headers = {"Authorization" : "Basic %s" % auth, 'Content-Type': 'application/x-www-form-urlencoded'}
    except:
-      logging.error("Unable to load txt header.\n")
+      logging.error("Unable to load txt header.")
    
    try:
       conn = httplib.HTTPSConnection("api.twilio.com")
@@ -90,15 +109,15 @@ def run_module(name, location, message, tosms, logfile):
       data = response.read()
       conn.close()
    except:
-      logging.error("Unable to send text.\n")
+      logging.error("Unable to send text.")
    
       
       
 langs = {}
 try:
    langfile = open('languages','r')
-except:
-   logging.info("Unable to open languages file.\n")
+except IOError as e:
+   logging.info("Unable to open logfile: %s" % (e))
    sys.exit()
 for line in langfile:
    if not line[0] == "#":
