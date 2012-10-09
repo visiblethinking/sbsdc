@@ -24,7 +24,7 @@ def accept_conn(data):
 		sender = x[8:]
 	
 	newpid = os.fork()
-	if newpid != 0:
+	if newpid == 0:
 	    logging.warning("Module run failed on fork: PID")
 	    sys.exit()
 	else:
