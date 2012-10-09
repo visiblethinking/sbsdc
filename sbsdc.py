@@ -58,7 +58,7 @@ if __name__ == "__main__":
 	import time
 	import socket
 	import threading
-	import loggingjj
+	import logging
 
     except ImportError as e:
 	print "Unable to import all modules: %s" % e
