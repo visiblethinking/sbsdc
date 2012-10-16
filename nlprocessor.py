@@ -24,11 +24,11 @@ def simple_path(path):
     return [s.lemmas[0].name for s in path]
 
 def nl_process(string, logfile, module_keys):
+    logging.info("NLTK starting up with %s." % string)
     string = tag(string)
     location = ""
     search_term = []
     text = ""
-    print "working to here"
     for word in string:
         if word[1] is None:
             location = word[0]
