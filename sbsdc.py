@@ -145,7 +145,11 @@ if __name__ == "__main__":
 		    client, address = soc.accept() 
 		    data = client.recv(size) 
 		    if data:
-			accept_conn(data) 
+#DEBUG
+			print 'sbsdc.py: in while loop2... right before accept_conn'
+			accept_conn(data)
+#DEBUG			
+			print 'sbsdc.py: in while loop2.. right after accept_conn'
 		    client.close()
 	    except Exception as e:
 		logging.error(str(e) + ": Server failed.")
