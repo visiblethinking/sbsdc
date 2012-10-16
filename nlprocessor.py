@@ -28,6 +28,7 @@ def nl_process(string, logfile, module_keys):
     location = ""
     search_term = []
     text = ""
+    print "working to here"
     for word in string:
         if word[1] is None:
             location = word[0]
@@ -36,7 +37,6 @@ def nl_process(string, logfile, module_keys):
             text += "%s " % word[0]
         else:
             text += "%s " % word[0]
-            continue
     
     logging.info("NLTK found %s" % text)
     if text.find("[0-9]* (.*)"):
