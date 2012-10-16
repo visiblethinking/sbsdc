@@ -38,7 +38,15 @@ def nl_process(string, logfile, module_keys):
             text += "%s " % word[0]
             continue
     
-    print text
+    logging.info("NLTK found %s" % text)
+    if text.find("[0-9]* (.*)"):
+        logging.info("found address %s." % text)
+        a = text.find("[0-9]* (.*)")
+        b = text.rfind("[0-9]* (.*)")
+        while a <= b:
+            text = text[a]
+            a = a + 1
+    
     word = wordnet.synset('%s.n.01' % search_term)
     paths = word.hypernym_paths()
     for path in paths:
