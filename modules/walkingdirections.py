@@ -2,83 +2,80 @@
 # # # # # # # # # # # # # # # # # # # # # # 
 #
 # project: Smart Bus Stops Done Dirt Cheap
-# title: walkingdirections
-# file: walkingdirections.py
-# description: returns walking directions to a location.
+# title: transit
+# file: transit.py
+# description: Transit Directions module for SBSDC
 # language: python
 # 
-# authors: Cameron Jeffries (camservo@gmail.com)
-# date: 9/9/2012
+# authors: Andrew Hyder
+# date: 10/15/2012
 # version: 1.0.0
-# notes: .
+# notes: Gives transit directions
 #
 # keywords: walking, walk, foot, onfoot, walkingdir
 #
 # # # # # # # # # # # # # # # # # # # # # #
-
-# Usage: walkingDirections.py <phone#> <lat> <long> <message>
-import sys
-import urllib
-import simplejson
-import urllib2
-
-progName = sys.argv[0]
-argList = sys.argv[1:]
-argCount = len(argList)
-messageList=[]
-containsStr=''
-messageStr=''
-
-
-for i in range(argCount):
-    if i == 0:
-        phoneNum = argList[i]
-    elif i == 1:
-        srcLat = argList    [i]
-    elif i == 2:
-        srcLon = argList[i]
-    else:
-        messageList.append(argList[i])
-        
-
-
-for item in messageList:
-    containsStr += 'name__icontains:' + str(item) + ','
-for item in messageList:
-    messageStr += str(item) + ' '
-
-
-mfURL = 'http://query.mapfluence.com/2.0/faa2473800838e5a0b407b40b3ab93ed/spatialquery.json?from=umi.business_listings.geometry&select=name,geometry&where=AND(' + containsStr + 'intersects(range(10mi,%20{%22type%22:%22Point%22,%22coordinates%22:[' + str(srcLon) + ',' + str(srcLat) + ']})))'
-mfResponse = urllib.urlopen(mfURL)
-
-for line in mfResponse:
-    mfDict = simplejson.loads(line)
-
 try:
-    x = mfDict['features'][0]['geometry']['coordinates'][0]
-except NameError:
-    print 'No listing for: ' + messageStr + 'found'
-    exit()
-except IndexError:
-    print 'No listing for: ' + messageStr + 'found'
-    exit()
+    import sys, urllib, simplejson
+except ImportError as e:
+    sys.exit(e)
 
-print mfDict['features'][0]['geometry']['coordinates']
-
-destLon = mfDict['features'][0]['geometry']['coordinates'][0]
-destLat = mfDict['features'][0]['geometry']['coordinates'][1]
+phoneNum = sys.argv[1]
+bus_stop_lat = sys.argv[2]
+bus_stop_lng = sys.argv[3]
+message_list = sys.argv[4:]
 
 
-URL = 'http://open.mapquestapi.com/directions/v1/route?outFormat=json&routeType=pedestrian&from=' + str(srcLat) + ',' + str(srcLon) + '&to=' + str(destLat) + ',' + str(destLon) #'&callback=renderNarrative'
-response = urllib.urlopen(URL)
+def parse_destination(message_list):
+	message_str = ' '.join(message_list)
+	destination = message_str
+	transit_words = ['transit','bus','train','rail','bart','muni','subway']
+	for transit_word in transit_words:
+		if transit_word in message_list:
+			i = message_list.index(transit_word)
+			dest_list = message_list[i+1:]
+			destination = ''
+			destination = ' '.join(dest_list)
+	if 'to' in message_list:
+		i = message_list.index('to')
+		dest_list = message_list[i+1:]
+		destination = ''
+		destination = ' '.join(dest_list)
 
-for line in response:
-    response_dict = simplejson.loads(line)
+	return destination
 
-legs_list = response_dict['route']['legs']
+def get_destination_lat_lon(bus_stop_lat,bus_stop_lng,destination):
+	fq_api = 'https://api.foursquare.com/v2/venues/search'
+	location = '?ll='+str(bus_stop_lat)+','+str(bus_stop_lng)
+	limit = '&limit=1'
+	query = '&query='+destination
+	oauth_key ='&oauth_token=EIIMHUKS2TFQALQMUBRGUZQ4QVLUEUTDR4MG0U2UZ1DLND5E&v=20120917'
+	response = urllib.urlopen(fq_api+location+limit+query+oauth_key)
+	print fq_api+location+limit+query+oauth_key
+	for line in response:
+		response_dict = simplejson.loads(line)
+		for venue in response_dict['response']['venues']:
+			dest_name = venue['name']
+			dest_lat = venue['location']['lat']
+			dest_lng = venue['location']['lng']
+	return dest_name, dest_lat, dest_lng
 
-legs_dict = legs_list[0]
+def get_transit_directions(bus_stop_lat, bus_stop_lng, dest_lat, dest_lng):
+	mq_api = 'http://open.mapquestapi.com/directions/v1/route?outFormat=json&routeType=pedestrian&timeType=1'
+	from_bus_stop = '&from=' + str(bus_stop_lat) + ',' + str(bus_stop_lng)
+	to_dest = '&to=' + str(dest_lat) + ',' + str(dest_lng)
+	response = urllib.urlopen(mq_api+from_bus_stop+to_dest)
+	for line in response:
+	    response_dict = simplejson.loads(line)
+	legs_list = response_dict['route']['legs']
+	legs_dict = legs_list[0]
+	for v in legs_dict['maneuvers']:
+	    print v['narrative']
 
-for v in legs_dict['maneuvers']:
-    print v['narrative'] + ';'
-
+destination = parse_destination(message_list)
+if not destination:
+	print 'Sorry, couldn\'t find directions there. Better ask somebody else.'
+	sys.exit()
+dest_name, dest_lat, dest_lng = get_destination_lat_lon(bus_stop_lat,bus_stop_lng,destination)
+print dest_name
+get_transit_directions(bus_stop_lat,bus_stop_lng,dest_lat,dest_lng)
