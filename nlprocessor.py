@@ -33,11 +33,12 @@ def nl_process(string, logfile, module_keys):
             location = word[0]
         elif word[1] == "NN" or word[1] == "ADJ" or word[1] == "V":
             search_term = word[0]
-            #text += " " . word[0]
+            text += "%s " % word[0]
         else:
-            #text += " " . word[0]
+            text += "%s " % word[0]
             continue
     
+    print text
     word = wordnet.synset('%s.n.01' % search_term)
     paths = word.hypernym_paths()
     for path in paths:
