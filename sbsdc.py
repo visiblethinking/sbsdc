@@ -46,7 +46,7 @@ def accept_conn(data):
 		except Exception as e:
 		    logging.error("Failed in run_module in basic mode: %s" % e)
     except Exception as e:
-	logging.error("failed in accept_conn: %s" % e)
+	logging.error("failed in accept_conn:") #%s" % e)
 	
 if __name__ == "__main__":
     try:
