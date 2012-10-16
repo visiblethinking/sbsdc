@@ -35,7 +35,7 @@ def nl_process(string, logfile, module_keys):
             search_term = word[0]
             text += word[0]
         else:
-            continue
+            text += word[0]
     
     word = wordnet.synset('%s.n.01' % search_term)
     paths = word.hypernym_paths()
