@@ -22,10 +22,11 @@ def accept_conn(data):
 		message = x[5:]
 	    if "from=" in x.lower():
 		sender = x[8:]
+	print 'in accept_conn: before fork'
 	
 	newpid = os.fork()
 #DEBUG
-	print 'in accept_conn: made it here!'
+	print 'in accept_conn: after fork'
 	if newpid == 0:
 	    logging.warning("Module run failed on fork: PID")
 	    sys.exit()
