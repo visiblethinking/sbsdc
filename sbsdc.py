@@ -62,6 +62,7 @@ if __name__ == "__main__":
 	print "Unable to import all modules: %s" % e
 	sys.exit()
 
+    print 'working to here'
     # Read config file and sset global standards
     global hostname
     global port
