@@ -28,15 +28,7 @@ try:
 except ImportError as e:
    sys.exit(e)
    
-#Logging formatting
-   try:
-      logging.basicConfig(filename=logfile,
-         format='%(asctime)s %(levelname)s %(message)s',
-         datefmt='%a, %d %b %Y %H:%M:%S',
-         level=logging.DEBUG)
 
-   except IOError, e:
-      sys.exit("Unable to print to log: %s" % e)
 
 module_name = []
 module_lang = {}
