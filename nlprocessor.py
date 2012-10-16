@@ -31,11 +31,11 @@ def nl_process(string, logfile, module_keys):
     for word in string:
         if word[1] is None:
             location = word[0]
-        elif word[1] == "NN":
+        elif word[1] == "NN" or word[1] == "ADJ" or word[1] == "V":
             search_term = word[0]
-            text += word[0]
+            text += " " . word[0]
         else:
-            continue
+            text += " " . word[0]
     
     word = wordnet.synset('%s.n.01' % search_term)
     paths = word.hypernym_paths()
