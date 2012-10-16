@@ -17,38 +17,29 @@ def accept_conn(data):
     try:
 	message = ""
 	sender = ""
+	print data
 	for x in data.split('&'):
 	    if "body=" in x.lower():
 		message = x[5:]
 	    if "from=" in x.lower():
 		sender = x[8:]
-#DEBUG	
-	print 'in accept_conn: before fork'
-	
-	newpid = os.fork()
-#DEBUG
-	print 'in accept_conn: after fork'
-	if newpid == 0:
-	    logging.warning("Module run failed on fork: PID")
-	    sys.exit()
+
+	if NL == 1:
+	    try:
+		message = " ".join(message.split("+"))
+		nl_data = nl_process(message,logfile,module_keys)
+		geo = get_location(nl_data[0])
+		run_module(nl_data[1], geo, nl_data[2], sender, logfile)
+	    except Exception as e:
+		logging.error("Failed in run_module in NLTK mode.\nmessage: %s\n module: %s\ngeo: %s\n%s" % message, nl_data[1], nl_data[0], e)
 	else:
-	    pids = (os.getpid(), newpid)
-	    if NL == 1:
-		try:
-		    message = " ".join(message.split("+"))
-		    nl_data = nl_process(message,logfile,module_keys)
-		    geo = get_location(nl_data[0])
-		    run_module(nl_data[1], geo, nl_data[2], sender, logfile)
-		except Exception as e:
-		    logging.error("Failed in run_module in NLTK mode.\nmessage: %s\n module: %s\ngeo: %s\n%s" % message, nl_data[1], nl_data[0], e)
-	    else:
-		try:
-		    message = " ".join(message.split("+")[2:])
-		    module = message.split("+")[1]
-		    geo = get_location(message.split("+")[0])
-		    run_module(module, geo , message, sender, logfile)
-		except Exception as e:
-		    logging.error("Failed in run_module in basic mode: %s" % e)
+	    try:
+		message = " ".join(message.split("+")[2:])
+		module = message.split("+")[1]
+		geo = get_location(message.split("+")[0])
+		run_module(module, geo , message, sender, logfile)
+	    except Exception as e:
+		logging.error("Failed in run_module in basic mode: %s" % e)
     except Exception as e:
 	logging.error("failed in accept_conn:") #%s" % e)
 	
@@ -129,8 +120,6 @@ if __name__ == "__main__":
 
     while 1:
 	try:
-#DEBUG	    
-	    print 'sbsdc.py: while loop #1'
 	    soc = None
 	    soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	    port = int(float(port))
@@ -140,19 +129,11 @@ if __name__ == "__main__":
 	    logging.info("Server is now running on %s:%s" % (hostname, port))
 	    try:
 		while 1:
-#DEBUG		    
-		    print 'sbsdc.py: while loop #2'
 		    client, address = soc.accept()
-		    logging.info(client)
-		    logging.info(address)
 		    data = client.recv(size)
 		    logging.info(data)
 		    if data:
-#DEBUG
-			print 'sbsdc.py: in while loop2... right before accept_conn'
 			accept_conn(data)
-#DEBUG			
-			print 'sbsdc.py: in while loop2.. right after accept_conn'
 		    client.close()
 	    except Exception as e:
 		logging.error(str(e) + ": Server failed.")
