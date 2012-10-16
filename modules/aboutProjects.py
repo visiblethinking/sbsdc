@@ -19,6 +19,18 @@ import sys
 import os
 import csv
 
+import logging
+
+try:
+    logging.basicConfig(filename='./data/test.log',
+	    format='%(asctime)s %(levelname)s %(message)s',
+	    datefmt='%a, %d %b %Y %H:%M:%S',
+	    level=logging.DEBUG)
+    logging.info("\n-----------------------------------------------------\n: Startup, checking core and scanning modules.")
+except IOError, e:
+    print "Unable to print to log: %s" % e
+    sys.exit()
+
 progName = sys.argv[0]
 phoneNum = sys.argv[1]
 srcLat = sys.argv[2]
@@ -28,6 +40,8 @@ argCount = len(argList)
 messageList=[]
 messageStr=''
 
+for i in range(argCount):
+    logging.debug(argList[i])
 
 for i in range(argCount):
     messageList.append(argList[i])
