@@ -142,8 +142,11 @@ if __name__ == "__main__":
 		while 1:
 #DEBUG		    
 		    print 'sbsdc.py: while loop #2'
-		    client, address = soc.accept() 
-		    data = client.recv(size) 
+		    client, address = soc.accept()
+		    logging.info(client)
+		    logging.info(address)
+		    data = client.recv(size)
+		    logging.info(data)
 		    if data:
 #DEBUG
 			print 'sbsdc.py: in while loop2... right before accept_conn'
