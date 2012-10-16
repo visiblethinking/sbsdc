@@ -26,13 +26,13 @@ def simple_path(path):
 def nl_process(string, logfile, module_keys):
     string = tag(string)
     location = ""
-    search_term = ""
+    search_term = []
     text = ""
     for word in string:
         if word[1] is None:
             location = word[0]
         elif word[1] == "NN" or word[1] == "ADJ" or word[1] == "V":
-            search_term = word[0]
+            search_terms.append(word[0])
             text += "%s " % word[0]
         else:
             text += "%s " % word[0]
@@ -44,22 +44,24 @@ def nl_process(string, logfile, module_keys):
         a = text.find("[0-9]* (.*)")
         b = text.rfind("[0-9]* (.*)")
         while a <= b:
-            text = text[a]
+            part = text[a]
             a = a + 1
+        text = part   
     
-    word = wordnet.synset('%s.n.01' % search_term)
-    paths = word.hypernym_paths()
-    for path in paths:
-        for line in simple_path(path):
-            for key, value in module_keys.items():
-                if line in value.split(", "):
-                    module = key
-                    break
+    for item in search_terms:
+        word = wordnet.synset('%s.n.01' % item)
+        paths = word.hypernym_paths()
+        for path in paths:
+            for line in simple_path(path):
+                for key, value in module_keys.items():
+                    if line in value.split(", "):
+                        module = key
+                        break
+                else:
+                    continue
+                break
             else:
                 continue
             break
-        else:
-            continue
-        break
     
     return(location,module,text)
