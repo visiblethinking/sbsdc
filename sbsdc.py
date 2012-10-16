@@ -22,6 +22,7 @@ def accept_conn(data):
 		message = x[5:]
 	    if "from=" in x.lower():
 		sender = x[8:]
+#DEBUG	
 	print 'in accept_conn: before fork'
 	
 	newpid = os.fork()
@@ -128,6 +129,8 @@ if __name__ == "__main__":
 
     while 1:
 	try:
+#DEBUG	    
+	    print 'sbsdc.py: while loop #1'
 	    soc = None
 	    soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	    port = int(float(port))
@@ -137,6 +140,8 @@ if __name__ == "__main__":
 	    logging.info("Server is now running on %s:%s" % (hostname, port))
 	    try:
 		while 1:
+#DEBUG		    
+		    print 'sbsdc.py: while loop #2'
 		    client, address = soc.accept() 
 		    data = client.recv(size) 
 		    if data:
