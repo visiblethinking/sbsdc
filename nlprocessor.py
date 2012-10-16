@@ -24,32 +24,44 @@ def simple_path(path):
     return [s.lemmas[0].name for s in path]
 
 def nl_process(string, logfile, module_keys):
+    logging.info("NLTK starting up with %s." % string)
     string = tag(string)
     location = ""
-    search_term = ""
+    search_term = []
     text = ""
     for word in string:
         if word[1] is None:
             location = word[0]
-        elif word[1] == "NN" or word[1] == "ADJ" or word[1] == "V":
-            search_term = word[0]
-            text += word[0]
+        elif word[1].find("NN") or word[1].find("WRB") or word[1].find("JJ") or word[1].find("VB"):
+            search_terms.append(word[0])
+            text += "%s " % word[0]
         else:
-            text += word[0]
+            text += "%s " % word[0]
     
-    word = wordnet.synset('%s.n.01' % search_term)
-    paths = word.hypernym_paths()
-    for path in paths:
-        for line in simple_path(path):
-            for key, value in module_keys.items():
-                if line in value.split(", "):
-                    module = key
-                    break
+    logging.info("NLTK found %s" % text)
+    if text.find("[0-9]* (.*)"):
+        logging.info("found address %s." % text)
+        a = text.find("[0-9]* (.*)")
+        b = text.rfind("[0-9]* (.*)")
+        while a <= b:
+            part = text[a]
+            a = a + 1
+        text = part   
+    
+    for item in search_terms:
+        word = wordnet.synset('%s.n.01' % item)
+        paths = word.hypernym_paths()
+        for path in paths:
+            for line in simple_path(path):
+                for key, value in module_keys.items():
+                    if line in value.split(", "):
+                        module = key
+                        break
+                else:
+                    continue
+                break
             else:
                 continue
             break
-        else:
-            continue
-        break
     
     return(location,module,text)

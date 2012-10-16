@@ -22,8 +22,12 @@ def accept_conn(data):
 		message = x[5:]
 	    if "from=" in x.lower():
 		sender = x[8:]
+#DEBUG	
+	print 'in accept_conn: before fork'
 	
 	newpid = os.fork()
+#DEBUG
+	print 'in accept_conn: after fork'
 	if newpid == 0:
 	    logging.warning("Module run failed on fork: PID")
 	    sys.exit()
@@ -46,7 +50,7 @@ def accept_conn(data):
 		except Exception as e:
 		    logging.error("Failed in run_module in basic mode: %s" % e)
     except Exception as e:
-	logging.error("failed in accept_conn: %s" % e)
+	logging.error("failed in accept_conn:") #%s" % e)
 	
 if __name__ == "__main__":
     try:
@@ -62,6 +66,7 @@ if __name__ == "__main__":
 	print "Unable to import all modules: %s" % e
 	sys.exit()
 
+    print 'working to here'
     # Read config file and sset global standards
     global hostname
     global port
@@ -124,6 +129,8 @@ if __name__ == "__main__":
 
     while 1:
 	try:
+#DEBUG	    
+	    print 'sbsdc.py: while loop #1'
 	    soc = None
 	    soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	    port = int(float(port))
@@ -133,10 +140,19 @@ if __name__ == "__main__":
 	    logging.info("Server is now running on %s:%s" % (hostname, port))
 	    try:
 		while 1:
-		    client, address = soc.accept() 
-		    data = client.recv(size) 
+#DEBUG		    
+		    print 'sbsdc.py: while loop #2'
+		    client, address = soc.accept()
+		    logging.info(client)
+		    logging.info(address)
+		    data = client.recv(size)
+		    logging.info(data)
 		    if data:
-			accept_conn(data) 
+#DEBUG
+			print 'sbsdc.py: in while loop2... right before accept_conn'
+			accept_conn(data)
+#DEBUG			
+			print 'sbsdc.py: in while loop2.. right after accept_conn'
 		    client.close()
 	    except Exception as e:
 		logging.error(str(e) + ": Server failed.")

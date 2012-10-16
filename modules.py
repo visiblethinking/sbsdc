@@ -14,6 +14,7 @@
 # # # # # # # # # # # # # # # # # # # # # # 
 
 # search modules/ directory and determine name, language and keywords to available mods
+print 'working to modules.'
 
 try:
    import os

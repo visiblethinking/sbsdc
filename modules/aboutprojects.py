@@ -19,6 +19,9 @@ import sys
 import os
 import csv
 
+
+
+
 progName = sys.argv[0]
 phoneNum = sys.argv[1]
 srcLat = sys.argv[2]
@@ -28,6 +31,8 @@ argCount = len(argList)
 messageList=[]
 messageStr=''
 
+for i in range(argCount):
+    logging.debug(argList[i])
 
 for i in range(argCount):
     messageList.append(argList[i])
