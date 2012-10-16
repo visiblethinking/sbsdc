@@ -32,7 +32,7 @@ def nl_process(string, logfile, module_keys):
     for word in string:
         if word[1] is None:
             location = word[0]
-        elif word[1] == "NN" or word[1] == "ADJ" or word[1] == "V":
+        elif word[1].find("NN") or word[1].find("WRB") or word[1].find("JJ") or word[1].find("VB"):
             search_terms.append(word[0])
             text += "%s " % word[0]
         else:
