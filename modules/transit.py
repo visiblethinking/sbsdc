@@ -12,7 +12,7 @@
 # version: 1.0.0
 # notes: Gives transit directions
 #
-# keywords: transit, bus, directions, how
+# keywords: transit, bus, directions, how, train
 #
 # # # # # # # # # # # # # # # # # # # # # #
 
@@ -22,16 +22,27 @@ phoneNum = sys.argv[1]
 bus_stop_lat = sys.argv[2]
 bus_stop_lng = sys.argv[3]
 message_list = sys.argv[4:]
-message_str = ' '.join(message_list)
+
 
 def parse_destination(message_list):
-	i = message_list.index('to')
-	dest_list = message_list[i+1:]
-	destination = ''
-	destination = ' '.join(dest_list)
+	message_str = ' '.join(message_list)
+	destination = message_str
+	transit_words = ['transit','bus','train','rail','bart','muni','subway']
+	for transit_word in transit_words:
+		if transit_word in message_list:
+			i = message_list.index(transit_word)
+			dest_list = message_list[i+1:]
+			destination = ''
+			destination = ' '.join(dest_list)
+	if 'to' in message_list:
+		i = message_list.index('to')
+		dest_list = message_list[i+1:]
+		destination = ''
+		destination = ' '.join(dest_list)
+
 	return destination
 
-def get_destination_lat_lon(bust_stop_lat,bus_stop_lng,destination):
+def get_destination_lat_lon(bus_stop_lat,bus_stop_lng,destination):
 	fq_api = 'https://api.foursquare.com/v2/venues/search'
 	location = '?ll='+str(bus_stop_lat)+','+str(bus_stop_lng)
 	limit = '&limit=1'
@@ -62,7 +73,11 @@ def get_transit_directions(bus_stop_lat, bus_stop_lng, dest_lat, dest_lng):
 			print v['narrative']
 
 destination = parse_destination(message_list)
+if not destination:
+	print 'Sorry, couldn\'t find directions there. Better ask somebody else.'
+	sys.exit()
 dest_name, dest_lat, dest_lng = get_destination_lat_lon(bus_stop_lat,bus_stop_lng,destination)
+print dest_name
 get_transit_directions(bus_stop_lat,bus_stop_lng,dest_lat,dest_lng)
 
 
