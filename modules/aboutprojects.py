@@ -19,17 +19,8 @@ import sys
 import os
 import csv
 
-import logging
 
-try:
-    logging.basicConfig(filename='/var/www/smartbusstop.com/logs/sbsdc.py',
-	    format='%(asctime)s %(levelname)s %(message)s',
-	    datefmt='%a, %d %b %Y %H:%M:%S',
-	    level=logging.DEBUG)
-    logging.info("\n-----------------------------------------------------\n: Startup, checking core and scanning modules.")
-except IOError, e:
-    print "Unable to print to log: %s" % e
-    sys.exit()
+
 
 progName = sys.argv[0]
 phoneNum = sys.argv[1]
