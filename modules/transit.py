@@ -46,7 +46,7 @@ def get_destination_lat_lon(bust_stop_lat,bus_stop_lng,destination):
 			dest_lng = venue['location']['lng']
 	return dest_name, dest_lat, dest_lng
 
-def get_transit_directions(bus_stop_lat, bus_stop_lng, dest_lat, dest_lng):
+def get_transit_directions(bus_stop_lat, bus_stop_lng, dest_lat, dest_lng, dest_name):
 	mq_api = 'http://open.mapquestapi.com/directions/v1/route?outFormat=json&routeType=multimodal&timeType=1'
 	from_bus_stop = '&from=' + str(bus_stop_lat) + ',' + str(bus_stop_lng)
 	to_dest = '&to=' + str(dest_lat) + ',' + str(dest_lng)
@@ -59,11 +59,12 @@ def get_transit_directions(bus_stop_lat, bus_stop_lng, dest_lat, dest_lng):
 	legs_dict = legs_list[0]
 	for v in legs_dict['maneuvers']:
 		if v['transportMode'] != 'WALKING' and v['transportMode'] != 'AUTO':
-			print v['narrative'] + ';'
+			print dest_name
+			print v['narrative']
 
 destination = parse_destination(message_list)
 dest_name, dest_lat, dest_lng = get_destination_lat_lon(bus_stop_lat,bus_stop_lng,destination)
-get_transit_directions(bus_stop_lat,bus_stop_lng,dest_lat,dest_lng)
+get_transit_directions(bus_stop_lat,bus_stop_lng,dest_lat,dest_lng, dest_name)
 
 
 
