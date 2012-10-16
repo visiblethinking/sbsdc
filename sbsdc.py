@@ -17,13 +17,14 @@ def accept_conn(data):
     try:
 	message = ""
 	sender = ""
-	print data
 	for x in data.split('&'):
 	    if "body=" in x.lower():
 		message = x[5:]
 	    if "from=" in x.lower():
 		sender = x[8:]
 
+	print sender
+	print message
 	if NL == 1:
 	    try:
 		message = " ".join(message.split("+"))
