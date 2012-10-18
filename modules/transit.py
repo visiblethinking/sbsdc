@@ -12,7 +12,7 @@
 # version: 1.0.0
 # notes: Gives transit directions
 #
-# keywords: transit, bus, directions, how, train
+# keywords: transit, bus, directions, how, train, muni, subway, bart, rail
 #
 # # # # # # # # # # # # # # # # # # # # # #
 
@@ -22,7 +22,6 @@ phoneNum = sys.argv[1]
 bus_stop_lat = sys.argv[2]
 bus_stop_lng = sys.argv[3]
 message_list = sys.argv[4:]
-
 
 def parse_destination(message_list):
 	message_str = ' '.join(message_list)
@@ -69,8 +68,9 @@ def get_transit_directions(bus_stop_lat, bus_stop_lng, dest_lat, dest_lng):
 	legs_list = response_dict['route']['legs']
 	legs_dict = legs_list[0]
 	for v in legs_dict['maneuvers']:
-		if v['transportMode'] != 'WALKING' and v['transportMode'] != 'AUTO':
-			print v['narrative']
+		#if v['transportMode'] != 'WALKING':
+			if v['transportMode'] != 'AUTO':
+				print v['narrative']
 
 destination = parse_destination(message_list)
 if not destination:

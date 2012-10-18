@@ -12,27 +12,96 @@
 # version: 1.0.0
 # notes: Hear a story about the bus stop
 #
-# keywords: overheard, local stories
+# keywords: write, tell, story, stories, overheard, munidiaries, twitter, hear, listen
 #
 # # # # # # # # # # # # # # # # # # # # # #
-import sys, random
+import sys, urllib, simplejson, random
 phoneNum = sys.argv[1]
-lat = sys.argv[2]
-lon = sys.argv[3]
-message = sys.argv[4]
+bus_stop_lat = sys.argv[2]
+bus_stop_lng = sys.argv[3]
+message_list = sys.argv[4:]
+message_string = ' '.join(message_list)
 
-if message != "":
-    message = sys.argv[4]
-    # Write a message
-    w = open('localstories.txt','a')
-    w.write(message)
-    w.write('||')
-    w.close()
-    print 'Got it. We\'ll tell others your story when they ask.'
+def write_local_story(bus_stop_lat,bus_stop_lng,message_string):
+    cdb_api = 'http://ondrae.cartodb.com/api/v2/sql'
+    insert_sql = 'q=INSERT INTO local_stories (story, the_geom)'
+    values_sql = 'VALUES ('+message_string+', ST_SetSRID(ST_Point('+bus_stop_lng+','+bus_stop_lat+'),4326))'
+    api_key = '&api_key=c76fc43a824ff3b12c0f6ea0d6bcff28fd787926'
+    response = urllib.urlopen(cdb_api,insert_sql+values_sql+api_key)
+    for line in response:
+        response_dict = simplejson.loads(line)
+        if response_dict['error']:
+            print 'Sorry, that story was boring. Or we broke something. Our fault.'
+        else:
+            print 'Got it. We\'ll tell people your tall tale.'
 
-else:
-    r = open('localstories.txt','r')
-    r_raw = r.read()
-    stories = r_raw.split('||')
-    i = random.randint(0,len(stories)-2)
-    print stories[i]
+def clean_message_list(message_list):
+    # Get rid of punctuation for parsing which stories to grab.
+    if '.' or '?' in message_list[-1]:
+        message_list[-1] = message_list[-1][:len(message_list[-1])-1]
+    return message_list
+
+def get_local_story(bus_stop_lat,bus_stop_lng,local_stories_list):
+    cdb_api = 'http://ondrae.cartodb.com/api/v2/sql'
+    select_sql = 'q=SELECT story FROM local_stories WHERE the_geom = ST_SetSRID(ST_Point('+bus_stop_lng+','+bus_stop_lat+'),4326)'
+    api_key = '&api_key=c76fc43a824ff3b12c0f6ea0d6bcff28fd787926'
+    response = urllib.urlopen(cdb_api,select_sql+api_key)
+    for line in response:
+        response_dict = simplejson.loads(line)
+        for row in response_dict['rows']:
+            if row:
+                local_stories_list.append(row['story'])
+    return local_stories_list 
+
+def get_munidiaries(bus_stop_lat,bus_stop_lng,local_stories_list):
+    response = urllib.urlopen('http://search.twitter.com/search.json?geocode='+bus_stop_lat+','+bus_stop_lng+',7mi&q=munidiaries')
+    for line in response:
+        response_dict = simplejson.loads(line)
+        for result in response_dict['results']:
+            local_stories_list.append(result['text'])
+    return local_stories_list
+
+def get_local_tweet(bus_stop_lat,bus_stop_lng,local_stories_list):
+    response = urllib.urlopen('http://search.twitter.com/search.json?geocode='+bus_stop_lat+','+bus_stop_lng+',0.1mi')
+    for line in response:
+        response_dict = simplejson.loads(line)
+        for result in response_dict['results']:
+            local_stories_list.append(result['text'])
+    return local_stories_list
+
+local_stories_list = []
+
+message_list = clean_message_list(message_list)
+
+# If write or tell is in message, this will write the story to the bus stop.
+if 'write' in message_list:
+    write_local_story(bus_stop_lat,bus_stop_lng,message_string)
+    sys.exit()
+# Else check the different sources for local stories
+if 'munidiaries' in message_list:
+    local_stories_list = get_munidiaries(bus_stop_lat,bus_stop_lng,local_stories_list)
+    if local_stories_list:
+        print local_stories_list[random.randint(0,len(local_stories_list)-1)]
+        sys.exit()
+if 'twitter' in message_list:
+    local_stories_list = get_local_tweet(bus_stop_lat,bus_stop_lng,local_stories_list)
+    if local_stories_list:
+        print local_stories_list[random.randint(0,len(local_stories_list)-1)]
+        sys.exit()
+local_stories_list = get_local_story(bus_stop_lat, bus_stop_lng, local_stories_list)
+if local_stories_list:
+    print local_stories_list[random.randint(0,len(local_stories_list)-1)]
+    sys.exit()
+
+    # # Print out a random story
+    # if local_stories_list:
+    #     print local_stories_list[random.randint(0,len(local_stories_list)-1)]
+    # else:
+    #     local_stories_list = get_munidiaries(bus_stop_lat,bus_stop_lng,local_stories_list)
+    #     local_stories_list = get_local_tweet(bus_stop_lat,bus_stop_lng,local_stories_list)
+    #     if local_stories_list:
+    #         print local_stories_list[random.randint(0,len(local_stories_list)-1)]
+    #     else:
+    #         print 'No stories about this stop yet. Write or tell one! Or tweet something nearby.'
+
+
