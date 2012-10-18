@@ -66,11 +66,14 @@ def get_transit_directions(bus_stop_lat, bus_stop_lng, dest_lat, dest_lng):
 	    response_dict = simplejson.loads(line)
 	#print response_dict
 	legs_list = response_dict['route']['legs']
-	legs_dict = legs_list[0]
-	for v in legs_dict['maneuvers']:
-		#if v['transportMode'] != 'WALKING':
-			if v['transportMode'] != 'AUTO':
-				print v['narrative']
+	if legs_list:
+		legs_dict = legs_list[0]
+		for v in legs_dict['maneuvers']:
+			#if v['transportMode'] != 'WALKING':
+				if v['transportMode'] != 'AUTO':
+					print v['narrative']
+	else:
+		print 'Sorry, couldn\'t find directions there. Better ask somebody else.'
 
 destination = parse_destination(message_list)
 if not destination:
