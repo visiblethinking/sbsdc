@@ -1,4 +1,4 @@
-import nltk
+import nltk, logging
 from nltk.corpus import wordnet
 tokenizer = None
 tagger = None
@@ -27,7 +27,7 @@ def nl_process(string, logfile, module_keys):
     logging.info("NLTK starting up with %s." % string)
     string = tag(string)
     location = ""
-    search_term = []
+    search_terms = []
     text = ""
     for word in string:
         if word[1] is None:
