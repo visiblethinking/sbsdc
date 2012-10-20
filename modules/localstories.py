@@ -33,7 +33,7 @@ def share_local_story(bus_stop_lat,bus_stop_lng,message_string):
     for line in response:
         response_dict = simplejson.loads(line)
         try:
-            if not response_dict['error']:
+            if response_dict['total_rows'] == 1:
                 print 'Got it. We\'ll tell people your tall tale.'
         except:
             print 'Sorry, that story was boring. Or we broke something. Our fault.'
