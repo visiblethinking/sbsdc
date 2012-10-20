@@ -12,7 +12,7 @@
 # version: 1.0.0
 # notes: local shit
 #
-# keywords: places, food, drink, art, best, where, closest, nearby
+# keywords: places, food, drink, art, best, where, closest, nearby, near
 #
 # # # # # # # # # # # # # # # # # # # # # #
 import sys, urllib, simplejson, datetime, random
@@ -29,7 +29,7 @@ message_list = sys.argv[4:]
 message_str = ' '.join(message_list)
 
 def parse_message(l):
-	key_list=['best', 'where', 'closest', 'nearby', 'find', 'good']
+	key_list=['best', 'where', 'closest', 'nearby', 'find', 'good', 'near']
 	message = ''
 	for item in key_list:
 		if item in l:
