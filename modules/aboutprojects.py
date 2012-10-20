@@ -29,8 +29,11 @@ try:
 except IndexError:
     sys.exit('Failure in module: aboutprojects.py')
 
-if message_str.startswith('about'):
+if message_str.lower().startswith('about'):
     query_str = message_str[6:]
+else:
+    query_str = message_str
+    
     
     
 
