@@ -12,7 +12,7 @@
 # version: 1.0.0
 # notes: fetches and sends latest weather forecast
 #
-# keywords: weather, forecast
+# keywords: weather, forecast, hot, cold, rain, warm, fog, foggy, rainy, sun, sunny, cats, dogs
 #
 # # # # # # # # # # # # # # # # # # # # # #
 import sys, urllib, simplejson, datetime
