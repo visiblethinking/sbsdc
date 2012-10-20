@@ -35,10 +35,11 @@ def accept_conn(data):
 		logging.error("Failed in run_module in NLTK mode.\nmessage: %s\n module: %s\ngeo: %s\n%s" % message, nl_data[1], nl_data[0], e)
 	else:
 	    try:
-		message = " ".join(message.split("+")[2:])
+		question_text = " ".join(message.split("+")[2:])
+		stop_id = (message.split("+")[0])
 		module = message.split("+")[1]
-		geo = get_location(message.split("+")[0])
-		run_module(module, geo , message, sender, logfile)
+		geo = get_location(stop_id)
+		run_module(module, geo , question_text, sender, logfile)
 	    except Exception as e:
 		logging.error("Failed in run_module in basic mode: %s" % e)
     except Exception as e:
