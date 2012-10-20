@@ -12,7 +12,7 @@
 # version: 1.0.0
 # notes: .
 #
-# keywords: about
+# keywords: lordareus
 #
 # # # # # # # # # # # # # # # # # # # # # #
 import sys
