@@ -76,7 +76,7 @@ local_stories_list = []
 message_list = clean_message_list(message_list)
 
 # If write or tell is in message, this will write the story to the bus stop.
-if 'share' in message_list:
+if 'share' or 'Share' in message_list:
     share_local_story(bus_stop_lat,bus_stop_lng,message_string)
 else:
     # Else check the different sources for local stories
