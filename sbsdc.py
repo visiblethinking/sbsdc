@@ -15,6 +15,9 @@
     
 def get_module_name(message_list):
 	# TODO: remove punctuation
+    for message_word in message_list:
+	if str(message_word).lower() == 'about':
+	    return aboutprojects
     for module_name, keywords in module_keys.items():
         keywords = keywords.split(', ')
         for keyword in keywords:
