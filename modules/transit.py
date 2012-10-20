@@ -21,7 +21,8 @@ import sys, urllib, simplejson
 phoneNum = sys.argv[1]
 bus_stop_lat = sys.argv[2]
 bus_stop_lng = sys.argv[3]
-message_list = sys.argv[4:]
+message_string = sys.argv[4]
+message_list = message_string.split(' ')
 
 def parse_destination(message_list):
 	message_str = ' '.join(message_list)
