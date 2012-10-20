@@ -12,7 +12,7 @@
 # version: 1.0.0
 # notes: Hear a story about the bus stop
 #
-# keywords: write, tell, story, stories, overheard, munidiaries, twitter, hear, listen
+# keywords: share, tell, story, stories, overheard, munidiaries, twitter, hear, listen, tale
 #
 # # # # # # # # # # # # # # # # # # # # # #
 import sys, urllib, simplejson, random
@@ -22,7 +22,9 @@ bus_stop_lng = sys.argv[3]
 message_list = sys.argv[4:]
 message_string = ' '.join(message_list)
 
-def write_local_story(bus_stop_lat,bus_stop_lng,message_string):
+def share_local_story(bus_stop_lat,bus_stop_lng,message_string):
+    message_string = message_string.replace('share','')
+    message_string = message_string.replace('Share','')
     cdb_api = 'http://ondrae.cartodb.com/api/v2/sql'
     insert_sql = 'q=INSERT INTO local_stories (story, the_geom)'
     values_sql = 'VALUES ('+message_string+', ST_SetSRID(ST_Point('+bus_stop_lng+','+bus_stop_lat+'),4326))'
@@ -74,34 +76,19 @@ local_stories_list = []
 message_list = clean_message_list(message_list)
 
 # If write or tell is in message, this will write the story to the bus stop.
-if 'write' in message_list:
-    write_local_story(bus_stop_lat,bus_stop_lng,message_string)
+if 'share' in message_list:
+    share_local_story(bus_stop_lat,bus_stop_lng,message_string)
     sys.exit()
 # Else check the different sources for local stories
 if 'munidiaries' in message_list:
-    local_stories_list = get_munidiaries(bus_stop_lat,bus_stop_lng,local_stories_list)
-    if local_stories_list:
-        print local_stories_list[random.randint(0,len(local_stories_list)-1)]
-        sys.exit()
-if 'twitter' in message_list:
+    local_stories_list = get_munidiaries(bus_stop_lat,bus_stop_lng,local_stories_list))
+elif 'twitter' in message_list:
     local_stories_list = get_local_tweet(bus_stop_lat,bus_stop_lng,local_stories_list)
-    if local_stories_list:
-        print local_stories_list[random.randint(0,len(local_stories_list)-1)]
-        sys.exit()
-local_stories_list = get_local_story(bus_stop_lat, bus_stop_lng, local_stories_list)
+else:
+    local_stories_list = get_local_story(bus_stop_lat, bus_stop_lng, local_stories_list)
 if local_stories_list:
     print local_stories_list[random.randint(0,len(local_stories_list)-1)]
-    sys.exit()
+else:
+    print 'Sorry, no local stories to be found.'
 
-    # # Print out a random story
-    # if local_stories_list:
-    #     print local_stories_list[random.randint(0,len(local_stories_list)-1)]
-    # else:
-    #     local_stories_list = get_munidiaries(bus_stop_lat,bus_stop_lng,local_stories_list)
-    #     local_stories_list = get_local_tweet(bus_stop_lat,bus_stop_lng,local_stories_list)
-    #     if local_stories_list:
-    #         print local_stories_list[random.randint(0,len(local_stories_list)-1)]
-    #     else:
-    #         print 'No stories about this stop yet. Write or tell one! Or tweet something nearby.'
-
-
+print 'Send in a text with \'share\' as the first word to add a local story to the bus stop.'
