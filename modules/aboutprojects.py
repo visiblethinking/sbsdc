@@ -48,7 +48,7 @@ try:
         reader = csv.reader(f, delimiter='|', quoting=csv.QUOTE_NONE)
         for row in reader:
             try:
-                if key.lower() in str(row[0]).lower() or key.lower() in row[1].lower():
+                if key.lower() == str(row[0]).lower() or key.lower() in row[1].lower():
                     ret = row[2]
             except IndexError:
                 continue
