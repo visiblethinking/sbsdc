@@ -12,53 +12,40 @@
 # version: 1.0.0
 # notes: .
 #
-# keywords: about, elephant
+# keywords: about
 #
 # # # # # # # # # # # # # # # # # # # # # #
 import sys
 import os
 import csv
 
-
-
-
-progName = sys.argv[0]
-phoneNum = sys.argv[1]
-srcLat = sys.argv[2]
-srcLon = sys.argv[3]
-argList = sys.argv[4:]
-argCount = len(argList)
-messageList=[]
-messageStr=''
-
-for i in range(argCount):
-    logging.debug(argList[i])
-
-for i in range(argCount):
-    messageList.append(argList[i])
-
-for item in messageList:
-    messageStr += str(item) + ' '
-
-messageStr=messageStr[:-1]
-
-
-key = messageStr
-dataPath = "%s/data/aboutProjects" % (os.getcwd())
-data = open(dataPath, 'r')
+try:
+    prog_name = sys.argv[0]
+    phone_num = sys.argv[1]
+    src_lat = sys.argv[2]
+    src_lng = sys.argv[3]
+    message_list = sys.argv[4:]
+except IndexError:
+    sys.exit('Failure in module: aboutprojects.py')
+    
+message_str = ' '.join(message_list)
 ret=''
+data_dict={}
 
+key = message_str
+data_path = "%s/data/aboutProjects.txt" % (os.getcwd())
 
-dataDict={}
-
-with open(dataPath, 'r') as f:
-    reader = csv.reader(f, delimiter=':', quoting=csv.QUOTE_NONE)
-    for row in reader:
-        try:
-            if str(row[0]).lower() == key.lower() or row[1].lower() == key.lower():                
-                ret = row[2]
-        except IndexError:
-            continue
+try:
+    with open(data_path, 'r') as f:
+        reader = csv.reader(f, delimiter='|', quoting=csv.QUOTE_NONE)
+        for row in reader:
+            try:
+                if key.lower() in str(row[0]).lower() or key.lower() in row[1].lower():
+                    ret = row[2]
+            except IndexError:
+                continue
+except Exception:
+    sys.exit('Error in module aboutprojects.py')
 
 if ret == '':
     print 'Project does not exist.  Please see project list and enter by ID or by name as printed.'

@@ -38,7 +38,7 @@ def nl_process(string, logfile, module_keys):
         else:
             text += "%s " % word[0]
     
-    logging.info("NLTK found %s" % text)
+    '''logging.info("NLTK found %s" % text)
     if text.find("[0-9]* (.*)"):
         logging.info("found address %s." % text)
         a = text.find("[0-9]* (.*)")
@@ -46,7 +46,8 @@ def nl_process(string, logfile, module_keys):
         while a <= b:
             part = text[a]
             a = a + 1
-        text = part   
+        text = part
+    '''
     
     for item in search_terms:
         word = wordnet.synset('%s.n.01' % item)

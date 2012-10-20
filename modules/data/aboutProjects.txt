@@ -1,0 +1,24 @@
+1|10-Mile Garden|temp
+2|AnyType|a creative mobile application that lets people transform elements and objects in the physical world into novel digital typefaces.
+3|Citiplay|tries to facilitate playful interactions in everyday surroundings by turning sidewalks into gameboards
+4|Clear Vision|reimagines the promise of coin-operated telescopes to "bring distant objects of interest within close range".
+5|Clip + Slide|temp
+6|Darkness Map|temp
+7|DIY Traffic Counter|temp
+8|Fruit Fence|temp
+9|Glowing X-Walk|projects a field of light across an intersection that increases the visibility of pedestrians to oncoming traffic.
+10|Good Fences|temp
+11|Highlights|Lighting and projections are strategically placed to illuminate a dark space and create a sense of security while activating under utilized spaces at night; treating dark alleyways and unused spaces as a canvas for creative intervention, “Highlight”
+12|Hold Your Hand|Conducting energy through people to stimulate tangible public interactions.
+13|Instant [Play]|temp
+14|PPlanter|a public urinal/sink that treats wastewater in bamboo biofilters, senses maintenance requirements, and interacts with users digitally.
+15|Proto AR|temp
+16|Pulse Of The City|playfully empowers pedestrians with greater self-awareness. It turns pulses into unique real-time musical compositions.
+17|Shared Cinema|a video jukebox that activates public space. Use your phone to share and upvote videos you watch with friends & strangers!
+18|Smart Bus Stops|temp
+19|Street Sensing|temp
+20|Street Stage|creates a condoned space that reframes the street performer as a welcomed aspect of any public space.
+21|Traffic Intuition|temp
+22|Urban Parasol|temp
+23|Wind I Break|a deployable tensile structure that activates underutilized urban spaces by blocking wind and providing spaces for gathering. 
+24|Dead Drop Noir|An interactive urban mystery adventure. Think noir novel + scavenger hunt + city walking tour + guerilla art installation using USB

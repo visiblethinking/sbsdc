@@ -28,7 +28,8 @@ query = '&query='+message
 oauth_key ='&oauth_token=EIIMHUKS2TFQALQMUBRGUZQ4QVLUEUTDR4MG0U2UZ1DLND5E&v=20120917'
 response = urllib.urlopen(fq_api+location+limit+query+radius+oauth_key)
 
-def get_walking_directions(bus_stop_lat, bus_stop_lng, dest_lat, dest_lng):
+def print_walking_directions(bus_stop_lat, bus_stop_lng, dest_lat, dest_lng):
+	
 	mq_api = 'http://open.mapquestapi.com/directions/v1/route?outFormat=json&routeType=pedestrian&timeType=1'
 	from_bus_stop = '&from=' + str(bus_stop_lat) + ',' + str(bus_stop_lng)
 	to_dest = '&to=' + str(dest_lat) + ',' + str(dest_lng)
@@ -54,11 +55,11 @@ for line in response:
 		venue_lat = response_dict['response']['venues'][random_number]['location']['lat']
 		venue_lng = response_dict['response']['venues'][random_number]['location']['lng']
 		venue_address = response_dict['response']['venues'][random_number]['location']['address']
-	except IndexError:
+	except (IndexError, KeyError):
 		sys.exit('No results.  Best ask someone else!')
 	
 	print '%s: %s' % (venue_name, venue_address)
 	
-	walking_directions=get_walking_directions(bus_stop_lat, bus_stop_lng, venue_lat, venue_lng)
+	print_walking_directions(bus_stop_lat, bus_stop_lng, venue_lat, venue_lng)
 
 	
