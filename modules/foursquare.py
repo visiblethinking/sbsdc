@@ -28,20 +28,17 @@ bus_stop_lng = sys.argv[3]
 message_list = sys.argv[4:]
 message_str = ' '.join(message_list)
 
-import pdb; pdb.set_trace()
-
 def parse_message(l):
-	key_list=['best', 'where', 'closest', 'nearby', 'find']
+	key_list=['best', 'where', 'closest', 'nearby', 'find', 'good']
+	message = ''
 	for item in key_list:
 		if item in l:
 			i = l.index(item)
 			m_list = l[i+1:]
-			message = ''
 			message = ' '.join(m_list)
-			return message
 		else:
 			message = ' '.join(l)
-			return message
+	return message
 
 
 
