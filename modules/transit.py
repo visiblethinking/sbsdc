@@ -48,7 +48,6 @@ def parse_destination(message_list):
 		dest_list = message_list[i+1:]
 		destination = ''
 		destination = ' '.join(dest_list)
-	destination.replace()
 
 	return destination
 
