@@ -32,10 +32,12 @@ def share_local_story(bus_stop_lat,bus_stop_lng,message_string):
     response = urllib.urlopen(cdb_api,insert_sql+values_sql+api_key)
     for line in response:
         response_dict = simplejson.loads(line)
-        if response_dict['error']:
+        try:
+            if not response_dict['error']:
+                print 'Got it. We\'ll tell people your tall tale.'
+        except:
             print 'Sorry, that story was boring. Or we broke something. Our fault.'
-        else:
-            print 'Got it. We\'ll tell people your tall tale.'
+            
 
 def clean_message_list(message_list):
     # Get rid of punctuation for parsing which stories to grab.
