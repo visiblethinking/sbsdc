@@ -25,6 +25,15 @@ message_string = sys.argv[4]
 message_list = message_string.split(' ')
 
 def parse_destination(message_list):
+	# take out bus id and from
+	for word in message_list:
+		try:
+			number = int(word)
+			message_list.remove(word)
+			if word == 'from':
+				message_list.remove('from')
+		except:
+			pass
 	message_str = ' '.join(message_list)
 	destination = message_str
 	transit_words = ['transit','bus','train','rail','bart','muni','subway']
@@ -39,6 +48,7 @@ def parse_destination(message_list):
 		dest_list = message_list[i+1:]
 		destination = ''
 		destination = ' '.join(dest_list)
+	destination.replace()
 
 	return destination
 
