@@ -56,7 +56,7 @@ def get_local_story(bus_stop_lat,bus_stop_lng,local_stories_list):
     return local_stories_list 
 
 def get_munidiaries(bus_stop_lat,bus_stop_lng,local_stories_list):
-    response = urllib.urlopen('http://search.twitter.com/search.json?geocode='+bus_stop_lat+','+bus_stop_lng+',7mi&q=munidiaries')
+    response = urllib.urlopen('http://search.twitter.com/search.json?geocode='+bus_stop_lat+','+bus_stop_lng+',1mi&q=munidiaries')
     for line in response:
         response_dict = simplejson.loads(line)
         for result in response_dict['results']:
@@ -91,4 +91,4 @@ if local_stories_list:
 else:
     print 'Sorry, no local stories to be found.'
 
-print 'Text \'share\' as the first word to add a local story to a bus stop id.'
+print '\nText \'share\' as the first word to add a local story to a bus stop id.'
