@@ -81,7 +81,7 @@ if 'share' in message_list:
     sys.exit()
 # Else check the different sources for local stories
 if 'munidiaries' in message_list:
-    local_stories_list = get_munidiaries(bus_stop_lat,bus_stop_lng,local_stories_list))
+    local_stories_list = get_munidiaries(bus_stop_lat,bus_stop_lng,local_stories_list)
 elif 'twitter' in message_list:
     local_stories_list = get_local_tweet(bus_stop_lat,bus_stop_lng,local_stories_list)
 else:
