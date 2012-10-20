@@ -19,8 +19,8 @@ import sys, urllib, simplejson, random
 phoneNum = sys.argv[1]
 bus_stop_lat = sys.argv[2]
 bus_stop_lng = sys.argv[3]
-message_list = sys.argv[4:]
-message_string = ' '.join(message_list)
+message_string = sys.argv[4]
+message_list = message_string.split(' ')
 
 def share_local_story(bus_stop_lat,bus_stop_lng,message_string):
     message_string = message_string.replace('share','')
