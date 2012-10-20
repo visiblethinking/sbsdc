@@ -92,7 +92,10 @@ def split_text(s):
    this_message_count=0
    for i in range(0, s_length, cut_length):
       this_message_count+=1
-      r_list.append(s[i:i+cut_length] + '(%sof%s)' % (this_message_count, reply_count))
+      if not reply_count == 1:
+         r_list.append(s[i:i+cut_length] + '(%sof%s)' % (this_message_count, reply_count))
+      else:
+         r_list.append(s)
    return r_list   
    
    
