@@ -13,37 +13,56 @@
 #
 # # # # # # # # # # # # # # # # # # # # # # 
     
+def get_module_name(message_list):
+	# TODO: remove punctuation
+    for module_name, keywords in module_keys.items():
+        keywords = keywords.split(', ')
+        for keyword in keywords:
+            for message_word in message_list:
+                if keyword == message_word:
+                	return module_name
+                    
+def get_stop_id(message_list):
+    for message_word in message_list:
+        try:
+            message_number = int(message_word)
+            if len(message_word) > 3:
+                stop_id = message_number
+                return stop_id
+        except:
+            pass
+    if not stop_id:
+        logging.error('Didn\'t enter a bus stop id.')
+
 def accept_conn(data):
     try:
-	message = ""
-	sender = ""
-	for x in data.split('&'):
-	    if "body=" in x.lower():
-		message = x[5:]
-	    if "from=" in x.lower():
-		sender = x[8:]
-
-	print sender
-	print message
-	if NL == 1:
-	    try:
-		message = " ".join(message.split("+"))
-		nl_data = nl_process(message,logfile,module_keys)
-		geo = get_location(nl_data[0])
-		run_module(nl_data[1], geo, nl_data[2], sender, logfile)
-	    except Exception as e:
-		logging.error("Failed in run_module in NLTK mode.\nmessage: %s\n module: %s\ngeo: %s\n%s" % message, nl_data[1], nl_data[0], e)
-	else:
-	    try:
-		question_text = " ".join(message.split("+")[2:])
-		stop_id = (message.split("+")[0])
-		module = message.split("+")[1]
-		geo = get_location(stop_id)
-		run_module(module, geo , question_text, sender, logfile)
-	    except Exception as e:
-		logging.error("Failed in run_module in basic mode: %s" % e)
+		message = ""
+		sender = ""
+		for x in data.split('&'):
+		    if "body=" in x.lower():
+			message = x[5:]
+		    if "from=" in x.lower():
+			sender = x[8:]
+		if NL == 1:
+		    try:
+			message = " ".join(message.split("+"))
+			nl_data = nl_process(message,logfile,module_keys)
+			geo = get_location(nl_data[0])
+			run_module(nl_data[1], geo, nl_data[2], sender, logfile)
+		    except Exception as e:
+			logging.error("Failed in run_module in NLTK mode.\nmessage: %s\n module: %s\ngeo: %s\n%s" % message, nl_data[1], nl_data[0], e)
+		else:
+		    try:
+		    	message_list = message.split("+")
+		    	message_string = " ".join(message_list)
+			    module_name = get_module_name(message_list)
+				stop_id = get_stop_id(message_list)
+				geo = get_location(stop_id)
+				run_module(module_name, geo, message_string, sender, logfile)
+		    except Exception as e:
+				logging.error("Failed in run_module in basic mode: %s" % e)
     except Exception as e:
-	logging.error("failed in accept_conn: %s" % e)
+		logging.error("failed in accept_conn: %s" % e)
 	
 if __name__ == "__main__":
     try:
