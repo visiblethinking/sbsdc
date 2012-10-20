@@ -12,24 +12,50 @@
 # version: 1.0.0
 # notes: local shit
 #
-# keywords: places, food, drink, art
+# keywords: places, food, drink, art, best, where, closest, nearby
 #
 # # # # # # # # # # # # # # # # # # # # # #
 import sys, urllib, simplejson, datetime, random
+
+def fake_nl_processor(message_list):
+	if 'find' in s:
+		k = s.split()
+
+
 phoneNum = sys.argv[1]
 bus_stop_lat = sys.argv[2]
 bus_stop_lng = sys.argv[3]
-message = sys.argv[4]
-fq_api = 'https://api.foursquare.com/v2/venues/search'
-location = '?ll='+str(bus_stop_lat)+','+str(bus_stop_lng)
-limit = '&limit=5'
-radius = '&radius=1000'
-query = '&query='+message
-oauth_key ='&oauth_token=EIIMHUKS2TFQALQMUBRGUZQ4QVLUEUTDR4MG0U2UZ1DLND5E&v=20120917'
-response = urllib.urlopen(fq_api+location+limit+query+radius+oauth_key)
+message_list = sys.argv[4:]
+message_str = ' '.join(message_list)
+
+import pdb; pdb.set_trace()
+
+def parse_message(l):
+	key_list=['best', 'where', 'closest', 'nearby', 'find']
+	for item in key_list:
+		if item in l:
+			i = l.index(item)
+			m_list = l[i+1:]
+			message = ''
+			message = ' '.join(m_list)
+			return message
+		else:
+			message = ' '.join(l)
+			return message
+
+
+
+def get_query(lat, lng, query):
+	fq_api = 'https://api.foursquare.com/v2/venues/search'
+	location = '?ll='+str(bus_stop_lat)+','+str(bus_stop_lng)
+	limit = '&limit=5'
+	radius = '&radius=1000'
+	query = '&query='+ query
+	oauth_key ='&oauth_token=EIIMHUKS2TFQALQMUBRGUZQ4QVLUEUTDR4MG0U2UZ1DLND5E&v=20120917'
+	response = urllib.urlopen(fq_api+location+limit+query+radius+oauth_key)
+	return response
 
 def print_walking_directions(bus_stop_lat, bus_stop_lng, dest_lat, dest_lng):
-	
 	mq_api = 'http://open.mapquestapi.com/directions/v1/route?outFormat=json&routeType=pedestrian&timeType=1'
 	from_bus_stop = '&from=' + str(bus_stop_lat) + ',' + str(bus_stop_lng)
 	to_dest = '&to=' + str(dest_lat) + ',' + str(dest_lng)
@@ -40,6 +66,9 @@ def print_walking_directions(bus_stop_lat, bus_stop_lng, dest_lat, dest_lng):
 	legs_dict = legs_list[0]
 	for v in legs_dict['maneuvers']:
 	    print v['narrative']
+
+message = parse_message(message_list)
+response = get_query(bus_stop_lat, bus_stop_lng, message)
 
 for line in response:
 	response_dict = simplejson.loads(line)	

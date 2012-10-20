@@ -1,3 +1,4 @@
+0|UP Fest, UPFest, Urban Prototyping, urbanproto|Bring people together, make stuff
 1|10-Mile Garden|10-Mile Garden.
 2|AnyType|a creative mobile application that lets people transform elements and objects in the physical world into novel digital typefaces.
 3|Citiplay|tries to facilitate playful interactions in everyday surroundings by turning sidewalks into gameboards
