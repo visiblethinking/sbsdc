@@ -60,7 +60,7 @@ def accept_conn(data):
                 message_string = " ".join(message_list)
                 module_name = get_module_name(message_list)
                 #Special case for aboutprojects
-		if module_name.lower != 'aboutprojects':
+		if module_name != 'aboutprojects':
 		    stop_id = get_stop_id(message_list)
 		    geo = get_location(stop_id)
 		    run_module(module_name, geo, message_string, sender, logfile)
