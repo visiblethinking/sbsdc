@@ -43,7 +43,6 @@ def accept_conn(data):
 			message = x[5:]
 		    if "from=" in x.lower():
 			sender = x[8:]
-
 		if NL == 1:
 		    try:
 			message = " ".join(message.split("+"))
