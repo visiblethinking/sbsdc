@@ -24,15 +24,23 @@ try:
     phone_num = sys.argv[1]
     src_lat = sys.argv[2]
     src_lng = sys.argv[3]
-    message_list = sys.argv[5:]
+    message_list = sys.argv[4:]
+    message_str = " ".join(message_list)
 except IndexError:
     sys.exit('Failure in module: aboutprojects.py')
+
+if message_str.lower().startswith('about'):
+    query_str = message_str[6:]
+else:
+    query_str = message_str
     
-message_str = ' '.join(message_list)
+    
+    
+
 ret=''
 data_dict={}
 
-key = message_str
+key = query_str
 data_path = "%s/modules/data/aboutProjects.txt" % (os.getcwd())
 
 try:
