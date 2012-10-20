@@ -19,8 +19,8 @@ import sys, urllib, simplejson, random
 phoneNum = sys.argv[1]
 bus_stop_lat = sys.argv[2]
 bus_stop_lng = sys.argv[3]
-message_list = sys.argv[4:]
-message_string = ' '.join(message_list)
+message_string = sys.argv[4]
+message_list = message_string.split(' ')
 
 def share_local_story(bus_stop_lat,bus_stop_lng,message_string):
     message_string = message_string.replace('share','')
@@ -33,7 +33,7 @@ def share_local_story(bus_stop_lat,bus_stop_lng,message_string):
     for line in response:
         response_dict = simplejson.loads(line)
         try:
-            if not response_dict['error']:
+            if response_dict['total_rows'] == 1:
                 print 'Got it. We\'ll tell people your tall tale.'
         except:
             print 'Sorry, that story was boring. Or we broke something. Our fault.'
@@ -78,7 +78,7 @@ local_stories_list = []
 message_list = clean_message_list(message_list)
 
 # If write or tell is in message, this will write the story to the bus stop.
-if message_list[0].lower == 'share':
+if message_list[0].lower() == 'share':
     share_local_story(bus_stop_lat,bus_stop_lng,message_string)
 else:
     # Else check the different sources for local stories
