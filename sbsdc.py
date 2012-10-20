@@ -57,6 +57,7 @@ def accept_conn(data):
         else:
             try:
                 message_list = message.split("+")
+                message_list[-1] = message_list[-1].replace('?','')
                 message_string = " ".join(message_list)
                 module_name = get_module_name(message_list)
                 # Special case for aboutprojects
