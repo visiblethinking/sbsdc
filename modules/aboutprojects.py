@@ -33,7 +33,7 @@ ret=''
 data_dict={}
 
 key = message_str
-data_path = "%s/data/aboutProjects.txt" % (os.getcwd())
+data_path = "%s/modules/data/aboutProjects.txt" % (os.getcwd())
 
 try:
     with open(data_path, 'r') as f:
