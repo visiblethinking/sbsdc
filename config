@@ -20,4 +20,4 @@ LOGFILE=/var/www/smartbusstop.com/logs/sbsdc.log
 
 # Natural language processing allows a more robust and error handled
 # input however requires nltk to be installed. http://nltk.org/
-NATURAL LANGUAGE=ON
+NATURAL LANGUAGE=OFF

@@ -80,15 +80,15 @@ if 'share' in message_list:
     share_local_story(bus_stop_lat,bus_stop_lng,message_string)
     sys.exit()
 # Else check the different sources for local stories
-if 'munidiaries' in message_list:
+local_stories_list = get_local_story(bus_stop_lat, bus_stop_lng, local_stories_list)
+if not local_stories_list:
     local_stories_list = get_munidiaries(bus_stop_lat,bus_stop_lng,local_stories_list)
-elif 'twitter' in message_list:
+if not local_stories_list:
     local_stories_list = get_local_tweet(bus_stop_lat,bus_stop_lng,local_stories_list)
-else:
-    local_stories_list = get_local_story(bus_stop_lat, bus_stop_lng, local_stories_list)
+
 if local_stories_list:
     print local_stories_list[random.randint(0,len(local_stories_list)-1)]
 else:
     print 'Sorry, no local stories to be found.'
 
-print 'Send in a text with \'share\' as the first word to add a local story to the bus stop.'
+print 'Text \'share\' as the first word to add a local story to a bus stop id.'
