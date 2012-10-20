@@ -24,7 +24,7 @@ try:
     phone_num = sys.argv[1]
     src_lat = sys.argv[2]
     src_lng = sys.argv[3]
-    message_list = sys.argv[4:]
+    message_list = sys.argv[5:]
 except IndexError:
     sys.exit('Failure in module: aboutprojects.py')
     
