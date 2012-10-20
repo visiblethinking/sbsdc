@@ -80,22 +80,25 @@ logging.info("Done loading modules.")
 
 def split_text(s):
    #Return a list of the text messages broken up
-   s_length = s.__len__()
+   s_length = len(s)
    if s_length < 1386:
       cut_length = 154
    elif s_length < 13860:
       cut_length = 152
    else:
       return ['Reply too long.']
-   reply_count = s.__len__() / cut_length
+   reply_count = s_length / cut_length + 1
    r_list = []
-   for i in range(0, len(s), cut_length):
-      r_list[i] = s[i:i+cut_length] + '(%sof%s)' % (i, reply_count)
+   this_message_count=0
+   for i in range(0, s_length, cut_length):
+      this_message_count+=1
+      r_list.append(s[i:i+cut_length] + '(%sof%s)' % (this_message_count, reply_count+1))
    return r_list   
    
    
 # sub that forks off a call to external module
 def run_module(name, location, message, tosms, logfile):
+   out_message_list=[]
    try:
       prog = langs[module_lang[name.lower()]].split("|")[0]
       lang = langs[module_lang[name.lower()]].split("|")[1]
@@ -104,27 +107,28 @@ def run_module(name, location, message, tosms, logfile):
       logging.info("%s%s %s %s %s %s" % (name.lower(), lang, tosms, location[0], location[1], message))
       process = subprocess.Popen(["%s" % prog, "%s/modules/%s%s" % (os.getcwd(), name, lang), tosms, location[0], location[1], message], stdin=PIPE, stdout=PIPE, shell=False)
       myoutput = process.stdout.read()
-###NEWLINES      
+
       out_message_list=split_text(myoutput)
-###NEWLINES
+
       logging.info("Running %s looking for %s." % (name.lower(), message))
    except:
       logging.error("Failed to run: %s%s" % (name.lower(), lang), tosms, location[0], location[1], message)
+      #This should be made to work..
       myoutput = "Sorry there was an error in your message."
    
-   for item in out_message_list:
-      
+   for i in range(0,len(out_message_list)):
+
       try:
          username = "AC47761615be8d2db6fcf6512360fb7815"
          password = "89a918aa03f5c16d5f8dac2bb69c0431"
-         params = {'From' : '14154187890', 'To' : tosms, 'Body' : out_message_list[item]}
+         params = {'From' : '14154187890', 'To' : tosms, 'Body' : out_message_list[i]}
          params = urllib.urlencode(params)
          auth = base64.encodestring("%s:%s" % (username, password)).replace('\n', '')
          headers = {"Authorization" : "Basic %s" % auth, 'Content-Type': 'application/x-www-form-urlencoded'}
-         
+
       except:
          logging.error("Unable to load txt header.")
-   
+
       try:
          conn = httplib.HTTPSConnection("api.twilio.com")
          conn.request("POST", "/2010-04-01/Accounts/AC47761615be8d2db6fcf6512360fb7815/SMS/Messages.xml", params, headers)
@@ -133,6 +137,7 @@ def run_module(name, location, message, tosms, logfile):
          conn.close()
       except:
          logging.error("Unable to send text.")
+
    
       
       
