@@ -22,7 +22,7 @@ def get_module_name(message_list):
         keywords = keywords.split(', ')
         for keyword in keywords:
             for message_word in message_list:
-                if keyword == message_word:
+                if keyword.lower() == message_word.lower():
                 	return module_name
                     
 def get_stop_id(message_list):
