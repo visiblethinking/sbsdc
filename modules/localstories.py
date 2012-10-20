@@ -29,7 +29,6 @@ def share_local_story(bus_stop_lat,bus_stop_lng,message_string):
     insert_sql = 'q=INSERT INTO local_stories (story, the_geom)'
     values_sql = 'VALUES (\''+message_string+'\', ST_SetSRID(ST_Point('+bus_stop_lng+','+bus_stop_lat+'),4326))'
     api_key = '&api_key=c76fc43a824ff3b12c0f6ea0d6bcff28fd787926'
-    print 
     response = urllib.urlopen(cdb_api,insert_sql+values_sql+api_key)
     for line in response:
         response_dict = simplejson.loads(line)
