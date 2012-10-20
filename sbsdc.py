@@ -59,9 +59,13 @@ def accept_conn(data):
                 message_list = message.split("+")
                 message_string = " ".join(message_list)
                 module_name = get_module_name(message_list)
-                stop_id = get_stop_id(message_list)
-                geo = get_location(stop_id)
-                run_module(module_name, geo, message_string, sender, logfile)
+                #Special case for aboutprojects
+		if module_name.lower != 'aboutprojects':
+		    stop_id = get_stop_id(message_list)
+		    geo = get_location(stop_id)
+		    run_module(module_name, geo, message_string, sender, logfile)
+		else:
+		    run_module(module_name, [0,0], message_string, sender, logfile)
             except Exception as e:
                 logging.error("Failed in run_module in basic mode: %s" % e)
     except Exception as e:
