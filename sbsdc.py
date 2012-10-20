@@ -65,7 +65,7 @@ def accept_conn(data):
 		    geo = get_location(stop_id)
 		    run_module(module_name, geo, message_string, sender, logfile)
 		else:
-		    run_module(module_name, [0,0], message_string, sender, logfile)
+		    run_module(module_name, ['0','0'], message_string, sender, logfile)
             except Exception as e:
                 logging.error("Failed in run_module in basic mode: %s" % e)
     except Exception as e:
