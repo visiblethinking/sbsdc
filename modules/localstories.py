@@ -78,17 +78,17 @@ message_list = clean_message_list(message_list)
 # If write or tell is in message, this will write the story to the bus stop.
 if 'share' in message_list:
     share_local_story(bus_stop_lat,bus_stop_lng,message_string)
-    sys.exit()
-# Else check the different sources for local stories
-local_stories_list = get_local_story(bus_stop_lat, bus_stop_lng, local_stories_list)
-if not local_stories_list:
-    local_stories_list = get_munidiaries(bus_stop_lat,bus_stop_lng,local_stories_list)
-if not local_stories_list:
-    local_stories_list = get_local_tweet(bus_stop_lat,bus_stop_lng,local_stories_list)
-
-if local_stories_list:
-    print local_stories_list[random.randint(0,len(local_stories_list)-1)]
 else:
-    print 'Sorry, no local stories to be found.'
+    # Else check the different sources for local stories
+    local_stories_list = get_local_story(bus_stop_lat, bus_stop_lng, local_stories_list)
+    if not local_stories_list:
+        local_stories_list = get_munidiaries(bus_stop_lat,bus_stop_lng,local_stories_list)
+    if not local_stories_list:
+        local_stories_list = get_local_tweet(bus_stop_lat,bus_stop_lng,local_stories_list)
 
-print '\nText \'share\' as the first word to add a local story to a bus stop id.'
+    if local_stories_list:
+        print local_stories_list[random.randint(0,len(local_stories_list)-1)]
+    else:
+        print 'Sorry, no local stories to be found.'
+
+    print '\nText \'share\' as the first word to add a local story to a bus stop id.'
