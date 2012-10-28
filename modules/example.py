@@ -12,7 +12,7 @@
 # version: 1.0.0
 # notes: An example of what a module needs for input and output.
 #
-# keywords: example, test
+# keywords: example
 #
 # # # # # # # # # # # # # # # # # # # # # #
 import sys
